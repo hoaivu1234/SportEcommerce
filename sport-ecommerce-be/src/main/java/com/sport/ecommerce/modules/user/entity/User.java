@@ -8,6 +8,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -20,23 +22,31 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id")
-    private Role role;
-
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 150)
     private String email;
 
     @Column(nullable = false)
     private String password;
 
+    @Column(length = 100)
     private String firstName;
 
+    @Column(length = 100)
     private String lastName;
 
+    @Column(length = 20)
     private String phone;
 
-    private String status;
+    @Column(length = 20)
+    private String status = "ACTIVE";
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
     @CreationTimestamp
     private LocalDateTime createdAt;
