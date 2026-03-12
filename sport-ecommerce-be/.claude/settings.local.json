@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Program Files/**)",
+      "Read(//c/Program Files/Microsoft//**)",
+      "Bash(cmd.exe /c \"where java\" 2>&1)",
+      "Bash(cmd.exe /c \"java -version\" 2>&1 && cmd.exe /c \"echo JAVA_HOME=%JAVA_HOME%\" 2>&1)",
+      "Bash(find /d/Ca_nhan/SportEcommerce/sport-ecommerce-be/src/main/java -type f -name \"*.java\" -exec wc -l {} \\\\; | sort -rn | head -10)",
+      "Bash(jar tf:*)"
+    ]
+  }
+}
