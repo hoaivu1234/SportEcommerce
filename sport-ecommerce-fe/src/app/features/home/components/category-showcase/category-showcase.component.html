@@ -1,0 +1,45 @@
+<section class="category-section">
+  <div class="container">
+    <div class="category-section__header">
+      <div>
+        <h2 class="section-title">Gear By Department</h2>
+        <p class="section-subtitle">Find the right gear for every sport and activity</p>
+      </div>
+      <a href="#" class="view-all-link">
+        View All Categories <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- Featured row (3 large) -->
+    <div class="category-grid category-grid--featured">
+      @for (cat of categories.slice(0, 3); track cat.name) {
+        <div class="category-card category-card--large" [style.background-image]="'url(' + cat.image + ')'">
+          <div class="category-card__overlay"></div>
+          <div class="category-card__content">
+            <span class="category-card__count">{{ cat.count }} Products</span>
+            <h3 class="category-card__name">{{ cat.name }}</h3>
+            <button class="category-card__btn">
+              Shop Now <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Secondary row (3 smaller) -->
+    <div class="category-grid category-grid--secondary">
+      @for (cat of categories.slice(3); track cat.name) {
+        <div class="category-card category-card--small" [style.background-image]="'url(' + cat.image + ')'">
+          <div class="category-card__overlay"></div>
+          <div class="category-card__content">
+            <span class="category-card__count">{{ cat.count }} Products</span>
+            <h3 class="category-card__name">{{ cat.name }}</h3>
+            <button class="category-card__btn">
+              Shop Now <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

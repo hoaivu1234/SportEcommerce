@@ -1,0 +1,56 @@
+<div class="product-listing">
+  <div class="container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a routerLink="/">Home</a>
+      <i class="fas fa-chevron-right"></i>
+      <span>Performance Footwear</span>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-header__title">PERFORMANCE GEAR</h1>
+    </div>
+
+    <div class="listing-layout">
+      <!-- Filter Sidebar -->
+      <app-filter-sidebar />
+
+      <!-- Main Content -->
+      <div class="listing-main">
+        <app-sort-bar
+          [totalProducts]="126"
+          [viewMode]="viewMode"
+          (viewModeChange)="onViewModeChange($event)"
+        />
+
+        <app-product-grid
+          [products]="products"
+          [viewMode]="viewMode"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Newsletter Strip -->
+  <div class="newsletter-strip">
+    <div class="container">
+      <div class="newsletter-strip__content">
+        <div class="newsletter-strip__text">
+          <h3>Join the Gear Club</h3>
+          <p>Get exclusive deals, early access to new products, and training tips.</p>
+        </div>
+        <form class="newsletter-strip__form" (ngSubmit)="subscribeNewsletter()">
+          <input
+            type="email"
+            [(ngModel)]="email"
+            name="email"
+            placeholder="Enter your email address"
+            class="newsletter-strip__input"
+          />
+          <button type="submit" class="newsletter-strip__btn">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

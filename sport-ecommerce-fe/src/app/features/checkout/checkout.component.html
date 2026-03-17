@@ -1,0 +1,22 @@
+<div class="checkout-page">
+  <!-- Minimal header -->
+  <header class="checkout-header">
+    <a routerLink="/" class="checkout-logo">
+      <span class="logo-icon"><i class="fas fa-bolt"></i></span>
+      <span class="logo-text">SPORT<span class="logo-accent">SHOP</span></span>
+    </a>
+    <div class="checkout-secure">
+      <i class="fas fa-lock"></i> Secure Checkout
+    </div>
+  </header>
+
+  <div class="checkout-body">
+    <div class="checkout-form-col">
+      <app-shipping-form />
+      <app-payment-form />
+    </div>
+    <div class="checkout-summary-col">
+      <app-order-summary />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="stats-card">
+  <div class="card-header">
+    <div class="card-icon" [style.background]="iconBgColor">
+      <i class="fas {{ icon }}"></i>
+    </div>
+    <div class="change-badge" [class.positive]="changePositive" [class.negative]="!changePositive">
+      <i class="fas" [class.fa-arrow-trend-up]="changePositive" [class.fa-arrow-trend-down]="!changePositive"></i>
+      {{ change }}
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card-value">{{ value }}</div>
+    <div class="card-title">{{ title }}</div>
+    <div class="card-subtitle">{{ subtitle }}</div>
+  </div>
+</div>

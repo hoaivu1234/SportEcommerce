@@ -1,0 +1,128 @@
+<div class="checkout-section">
+  <div class="section-header">
+    <div class="step-circle">3</div>
+    <h2 class="section-title">PAYMENT DETAILS</h2>
+  </div>
+
+  <!-- Tab Switcher -->
+  <div class="payment-tabs">
+    <button
+      class="payment-tab"
+      [class.payment-tab--active]="activeTab === 'card'"
+      (click)="setTab('card')"
+    >
+      <i class="fas fa-credit-card"></i> Credit Card
+    </button>
+    <button
+      class="payment-tab"
+      [class.payment-tab--active]="activeTab === 'paypal'"
+      (click)="setTab('paypal')"
+    >
+      <i class="fab fa-paypal"></i> PayPal
+    </button>
+    <button
+      class="payment-tab"
+      [class.payment-tab--active]="activeTab === 'apple'"
+      (click)="setTab('apple')"
+    >
+      <i class="fab fa-apple"></i> Apple Pay
+    </button>
+  </div>
+
+  @if (activeTab === 'card') {
+    <form [formGroup]="form" class="card-form">
+      <div class="form-group">
+        <label for="cardName">Name on Card *</label>
+        <input
+          id="cardName"
+          type="text"
+          formControlName="cardName"
+          placeholder="John Doe"
+          [class.input--error]="form.get('cardName')?.invalid && form.get('cardName')?.touched"
+        />
+        @if (form.get('cardName')?.invalid && form.get('cardName')?.touched) {
+          <span class="error-msg">Name is required</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="cardNumber">Card Number *</label>
+        <div class="card-input-wrap">
+          <input
+            id="cardNumber"
+            type="text"
+            formControlName="cardNumber"
+            placeholder="1234 5678 9012 3456"
+            maxlength="19"
+            (input)="formatCardNumber($event)"
+            [class.input--error]="form.get('cardNumber')?.invalid && form.get('cardNumber')?.touched"
+          />
+          <div class="card-icons">
+            <i class="fab fa-cc-visa"></i>
+            <i class="fab fa-cc-mastercard"></i>
+          </div>
+        </div>
+        @if (form.get('cardNumber')?.invalid && form.get('cardNumber')?.touched) {
+          <span class="error-msg">Valid 16-digit card number required</span>
+        }
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="expiry">Expiry Date *</label>
+          <input
+            id="expiry"
+            type="text"
+            formControlName="expiry"
+            placeholder="MM/YY"
+            maxlength="5"
+            [class.input--error]="form.get('expiry')?.invalid && form.get('expiry')?.touched"
+          />
+          @if (form.get('expiry')?.invalid && form.get('expiry')?.touched) {
+            <span class="error-msg">Valid expiry required (MM/YY)</span>
+          }
+        </div>
+        <div class="form-group">
+          <label for="cvv">CVV *</label>
+          <div class="cvv-wrap">
+            <input
+              id="cvv"
+              [type]="showCvv ? 'text' : 'password'"
+              formControlName="cvv"
+              placeholder="•••"
+              maxlength="4"
+              [class.input--error]="form.get('cvv')?.invalid && form.get('cvv')?.touched"
+            />
+            <button type="button" class="toggle-cvv" (click)="toggleCvv()">
+              <i [class]="showCvv ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+            </button>
+          </div>
+          @if (form.get('cvv')?.invalid && form.get('cvv')?.touched) {
+            <span class="error-msg">Valid CVV required</span>
+          }
+        </div>
+      </div>
+
+      <div class="security-notice">
+        <i class="fas fa-lock"></i>
+        <span>Your payment information is encrypted and secure. We never store your full card details.</span>
+      </div>
+    </form>
+  }
+
+  @if (activeTab === 'paypal') {
+    <div class="alt-payment paypal-panel">
+      <i class="fab fa-paypal paypal-icon"></i>
+      <p>You will be redirected to PayPal to complete your purchase securely.</p>
+      <button class="btn-paypal">Continue with PayPal</button>
+    </div>
+  }
+
+  @if (activeTab === 'apple') {
+    <div class="alt-payment apple-panel">
+      <i class="fab fa-apple apple-icon"></i>
+      <p>Use Touch ID or Face ID to complete your purchase with Apple Pay.</p>
+      <button class="btn-apple">Pay with Apple Pay</button>
+    </div>
+  }
+</div>

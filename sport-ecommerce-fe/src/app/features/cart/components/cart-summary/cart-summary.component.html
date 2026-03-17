@@ -1,0 +1,68 @@
+<div class="cart-summary">
+  <h3 class="cart-summary__title">ORDER SUMMARY</h3>
+
+  <!-- Promo Code -->
+  <div class="promo-section">
+    <p class="promo-label">Promo Code</p>
+    @if (!promoApplied) {
+      <div class="promo-input-wrap">
+        <input
+          type="text"
+          [(ngModel)]="promoCode"
+          placeholder="Enter code (try SPORT10)"
+          class="promo-input"
+        />
+        <button class="promo-btn" (click)="applyPromo()">Apply</button>
+      </div>
+    } @else {
+      <div class="promo-applied">
+        <i class="fas fa-check-circle"></i>
+        Code applied — {{ promoDiscount | currency }} off
+        <button class="promo-remove" (click)="promoApplied = false; promoDiscount = 0; promoCode = ''">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    }
+  </div>
+
+  <!-- Totals -->
+  <div class="summary-rows">
+    <div class="summary-row">
+      <span>Subtotal</span>
+      <span>{{ subtotal | currency }}</span>
+    </div>
+    @if (promoApplied) {
+      <div class="summary-row summary-row--discount">
+        <span>Promo Discount</span>
+        <span>-{{ promoDiscount | currency }}</span>
+      </div>
+    }
+    <div class="summary-row">
+      <span>Estimated Shipping</span>
+      <span>{{ shipping === 0 ? 'FREE' : (shipping | currency) }}</span>
+    </div>
+    <div class="summary-row">
+      <span>Estimated Tax</span>
+      <span>{{ tax | currency }}</span>
+    </div>
+  </div>
+
+  <div class="summary-total">
+    <span>TOTAL</span>
+    <span>{{ total | currency }}</span>
+  </div>
+
+  <a routerLink="/checkout" class="btn-checkout">
+    Proceed to Checkout <i class="fas fa-arrow-right"></i>
+  </a>
+
+  <a routerLink="/products" class="btn-continue">
+    <i class="fas fa-arrow-left"></i> Continue Shopping
+  </a>
+
+  <!-- Secure notice -->
+  <div class="secure-notice">
+    <i class="fas fa-lock"></i>
+    <span>Secure SSL encrypted payment</span>
+  </div>
+</div>

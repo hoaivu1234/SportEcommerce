@@ -29,3 +29,8 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
     baseline-version: 0
+
+cloudinary:
+  cloud-name: dezksnpfz
+  api-key: 859546286467584
+  api-secret: PIwXjgyPw3Qi-zsX2qPch7IFzGw

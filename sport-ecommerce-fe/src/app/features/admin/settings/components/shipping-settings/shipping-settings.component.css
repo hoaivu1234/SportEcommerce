@@ -1,0 +1,38 @@
+.coming-soon-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.icon-wrap {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: var(--color-light-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.coming-soon-icon {
+  font-size: 24px;
+  color: var(--color-gray);
+}
+
+h3 {
+  font-family: var(--font-condensed);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin: 0 0 8px;
+}
+
+p {
+  font-size: 13px;
+  color: var(--color-gray);
+  margin: 0;
+}

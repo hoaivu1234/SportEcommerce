@@ -1,0 +1,139 @@
+.chart-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  flex: 1;
+}
+
+.chart-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.chart-title {
+  font-family: var(--font-condensed);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin: 0 0 4px;
+  letter-spacing: 0.3px;
+}
+
+.chart-subtitle {
+  font-size: 12px;
+  color: var(--color-gray);
+  margin: 0;
+}
+
+.chart-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--color-light-gray);
+  padding: 3px;
+  border-radius: 8px;
+}
+
+.tab-btn {
+  padding: 6px 14px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-gray);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  background: #fff;
+  color: var(--color-dark);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.chart-area {
+  display: flex;
+  gap: 8px;
+  height: 200px;
+}
+
+.y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 24px;
+}
+
+.y-axis span {
+  font-size: 11px;
+  color: var(--color-gray);
+}
+
+.bars-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.bars-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  flex: 1;
+  gap: 8px;
+  border-bottom: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-border);
+  padding: 0 8px;
+}
+
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.bar-group:hover .bar-tooltip {
+  opacity: 1;
+}
+
+.bar-tooltip {
+  position: absolute;
+  top: -28px;
+  background: var(--color-dark);
+  color: #fff;
+  font-size: 11px;
+  padding: 3px 7px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.bar {
+  width: 100%;
+  max-width: 40px;
+  background: linear-gradient(180deg, var(--color-primary) 0%, rgba(232, 82, 26, 0.5) 100%);
+  border-radius: 4px 4px 0 0;
+  transition: height 0.4s ease;
+  cursor: pointer;
+}
+
+.bar:hover {
+  background: var(--color-primary);
+}
+
+.bar-label {
+  font-size: 11px;
+  color: var(--color-gray);
+  margin-top: 6px;
+  text-align: center;
+}

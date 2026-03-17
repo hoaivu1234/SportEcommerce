@@ -1,0 +1,77 @@
+<div class="reviews-page">
+  <!-- Header -->
+  <div class="page-header">
+    <h1 class="page-title">REVIEWS & MODERATION</h1>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    @for (card of statsCards; track card.label) {
+      <div class="stat-card">
+        <div class="stat-icon" [style.background]="card.iconBg">
+          <i class="fas {{ card.icon }}"></i>
+        </div>
+        <div class="stat-body">
+          <div class="stat-value">
+            {{ card.value }}
+            @if (card.stars) {
+              <span class="stars-inline">★★★★★</span>
+            }
+          </div>
+          <div class="stat-label">{{ card.label }}</div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Main Layout -->
+  <div class="reviews-layout">
+    <!-- Left: Reviews -->
+    <div class="reviews-col">
+      <!-- Tabs + Actions -->
+      <div class="reviews-toolbar">
+        <div class="tabs-row">
+          @for (tab of tabs; track tab.key) {
+            <button
+              class="tab-btn"
+              [class.active]="activeTab === tab.key"
+              (click)="setTab(tab.key)"
+            >{{ tab.label }}</button>
+          }
+        </div>
+        <div class="toolbar-actions">
+          <button class="btn btn-secondary btn-sm">
+            <i class="fas fa-sliders"></i> Filter
+          </button>
+          <button class="btn btn-secondary btn-sm">
+            <i class="fas fa-download"></i> Export Data
+          </button>
+        </div>
+      </div>
+
+      <app-review-table [reviews]="filteredReviews"></app-review-table>
+    </div>
+
+    <!-- Right: Rating Filter + Moderation -->
+    <div class="side-col">
+      <!-- Rating Filter -->
+      <div class="rating-card">
+        <h3 class="rating-title">Rating Filter</h3>
+        <div class="rating-breakdown">
+          @for (row of ratingBreakdown; track row.stars) {
+            <div class="rating-row">
+              <span class="rating-label">{{ row.stars }}★</span>
+              <div class="rating-bar-bg">
+                <div class="rating-bar" [style.width]="row.percent + '%'"></div>
+              </div>
+              <span class="rating-count">{{ row.count }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Moderation Panel -->
+      <app-review-moderation></app-review-moderation>
+    </div>
+  </div>
+</div>

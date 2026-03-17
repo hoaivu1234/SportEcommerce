@@ -1,0 +1,58 @@
+<header class="navbar" [class.scrolled]="isScrolled()">
+  <div class="navbar__inner container">
+    <!-- Logo -->
+    <a routerLink="/" class="navbar__logo">
+      <span class="logo-icon"><i class="fas fa-bolt"></i></span>
+      <span class="logo-text">SPORT<span class="logo-accent">SHOP</span></span>
+    </a>
+
+    <!-- Nav Links (desktop) -->
+    <nav class="navbar__nav">
+      @for (link of navLinks; track link.path) {
+        <a
+          [routerLink]="link.path"
+          class="navbar__nav-link"
+          [class.navbar__nav-link--highlight]="link.highlight"
+        >{{ link.label }}</a>
+      }
+    </nav>
+
+    <!-- Actions -->
+    <div class="navbar__actions">
+      <button class="navbar__action-btn" title="Search">
+        <i class="fas fa-search"></i>
+      </button>
+      <button class="navbar__action-btn" title="Wishlist">
+        <i class="far fa-heart"></i>
+      </button>
+      <button class="navbar__action-btn" title="Account">
+        <i class="far fa-user"></i>
+      </button>
+      <button class="navbar__action-btn navbar__cart-btn" title="Cart">
+        <i class="fas fa-shopping-bag"></i>
+        @if (cartCount() > 0) {
+          <span class="cart-badge">{{ cartCount() }}</span>
+        }
+      </button>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="navbar__mobile-toggle" (click)="toggleMobileMenu()" aria-label="Toggle menu">
+      <i class="fas" [class.fa-bars]="!mobileMenuOpen()" [class.fa-times]="mobileMenuOpen()"></i>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  @if (mobileMenuOpen()) {
+    <div class="navbar__mobile-menu">
+      @for (link of navLinks; track link.path) {
+        <a
+          [routerLink]="link.path"
+          class="navbar__mobile-link"
+          [class.navbar__mobile-link--highlight]="link.highlight"
+          (click)="mobileMenuOpen.set(false)"
+        >{{ link.label }}</a>
+      }
+    </div>
+  }
+</header>

@@ -1,0 +1,86 @@
+<div class="profile-page">
+  <div class="container">
+    <!-- Profile Hero -->
+    <div class="profile-hero">
+      <img src="https://picsum.photos/seed/500/80/80" alt="Avatar" class="profile-avatar" />
+      <div class="profile-hero__info">
+        <div class="profile-name-row">
+          <h1 class="profile-name">MARCUS STERLING</h1>
+          <span class="elite-badge"><i class="fas fa-crown"></i> Elite Member</span>
+        </div>
+        <p class="profile-meta">marcus.sterling&#64;athletes.com &middot; Joined Sept 2023</p>
+      </div>
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <span class="stat-val">34</span>
+          <span class="stat-label">Total Orders</span>
+        </div>
+        <div class="profile-stat">
+          <span class="stat-val">12,850</span>
+          <span class="stat-label">Loyalty Points</span>
+        </div>
+        <div class="profile-stat">
+          <span class="stat-val advanced">Advanced</span>
+          <span class="stat-label">Training Level</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layout -->
+    <div class="profile-layout">
+      <!-- Sidebar -->
+      <aside class="profile-sidebar">
+        <div class="sidebar-section">
+          <p class="sidebar-label">Account Menu</p>
+          <nav class="sidebar-nav">
+            @for (item of navItems; track item.key) {
+              <button
+                class="sidebar-nav-item"
+                [class.active]="activeTab === item.key"
+                (click)="setTab(item.key)"
+              >
+                <i [class]="'fas ' + item.icon"></i>
+                {{ item.label }}
+              </button>
+            }
+          </nav>
+        </div>
+        <div class="support-card">
+          <p class="support-title">NEED SUPPORT?</p>
+          <p class="support-sub">Available Mon–Fri, 9am–6pm</p>
+          <button class="live-chat-btn">
+            <i class="fas fa-comments"></i> Live Chat
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="profile-content">
+        @if (activeTab === 'orders') {
+          <app-order-history />
+        }
+        @if (activeTab === 'saved') {
+          <div class="placeholder-content">
+            <i class="fas fa-heart"></i>
+            <h3>Saved Items</h3>
+            <p>Products you've wishlisted will appear here.</p>
+            <a routerLink="/products" class="btn-browse">Browse Products</a>
+          </div>
+        }
+        @if (activeTab === 'address') {
+          <div class="placeholder-content">
+            <i class="fas fa-map-marker-alt"></i>
+            <h3>Address Book</h3>
+            <p>Your saved shipping addresses will appear here.</p>
+          </div>
+        }
+        @if (activeTab === 'settings') {
+          <app-profile-info />
+        }
+        @if (activeTab === 'security') {
+          <app-change-password />
+        }
+      </main>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="table-wrapper">
+  <table class="inventory-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>SKU</th>
+        <th>Location</th>
+        <th>Stock Level</th>
+        <th>Supplier</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of items; track item.sku) {
+        <tr>
+          <td>
+            <div class="product-name">{{ item.name }}</div>
+          </td>
+          <td>
+            <span class="sku-code">{{ item.sku }}</span>
+          </td>
+          <td class="location">{{ item.location }}</td>
+          <td>
+            <div class="stock-cell">
+              <span class="stock-num">{{ item.stock }}</span>
+              <div class="stock-bar-bg">
+                <div
+                  class="stock-bar {{ getBarClass(item.statusClass) }}"
+                  [style.width]="getStockPercent(item.stock, item.stockMax) + '%'"
+                ></div>
+              </div>
+            </div>
+          </td>
+          <td class="supplier">{{ item.supplier }}</td>
+          <td>
+            <span class="status-badge status-{{ item.statusClass }}">{{ item.status }}</span>
+          </td>
+          <td>
+            <div class="action-btns">
+              <button class="action-btn">
+                <i class="fas fa-pen"></i>
+              </button>
+              <button class="action-btn">
+                <i class="fas fa-ellipsis-vertical"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

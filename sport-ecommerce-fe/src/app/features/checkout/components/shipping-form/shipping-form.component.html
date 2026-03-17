@@ -1,0 +1,137 @@
+<!-- Section 1: Shipping Address -->
+<div class="checkout-section">
+  <div class="section-header">
+    <div class="step-circle">1</div>
+    <h2 class="section-title">SHIPPING ADDRESS</h2>
+  </div>
+
+  <form [formGroup]="form" class="shipping-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="firstName">First Name *</label>
+        <input
+          id="firstName"
+          type="text"
+          formControlName="firstName"
+          placeholder="John"
+          [class.input--error]="form.get('firstName')?.invalid && form.get('firstName')?.touched"
+        />
+        @if (form.get('firstName')?.invalid && form.get('firstName')?.touched) {
+          <span class="error-msg">First name is required</span>
+        }
+      </div>
+      <div class="form-group">
+        <label for="lastName">Last Name *</label>
+        <input
+          id="lastName"
+          type="text"
+          formControlName="lastName"
+          placeholder="Doe"
+          [class.input--error]="form.get('lastName')?.invalid && form.get('lastName')?.touched"
+        />
+        @if (form.get('lastName')?.invalid && form.get('lastName')?.touched) {
+          <span class="error-msg">Last name is required</span>
+        }
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="street">Street Address *</label>
+      <input
+        id="street"
+        type="text"
+        formControlName="street"
+        placeholder="123 Main Street"
+        [class.input--error]="form.get('street')?.invalid && form.get('street')?.touched"
+      />
+      @if (form.get('street')?.invalid && form.get('street')?.touched) {
+        <span class="error-msg">Street address is required</span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="apt">Apt / Suite <span class="optional">(optional)</span></label>
+      <input id="apt" type="text" formControlName="apt" placeholder="Apt 4B" />
+    </div>
+
+    <div class="form-row form-row--3">
+      <div class="form-group">
+        <label for="city">City *</label>
+        <input
+          id="city"
+          type="text"
+          formControlName="city"
+          placeholder="New York"
+          [class.input--error]="form.get('city')?.invalid && form.get('city')?.touched"
+        />
+        @if (form.get('city')?.invalid && form.get('city')?.touched) {
+          <span class="error-msg">City is required</span>
+        }
+      </div>
+      <div class="form-group">
+        <label for="state">State *</label>
+        <input
+          id="state"
+          type="text"
+          formControlName="state"
+          placeholder="NY"
+          [class.input--error]="form.get('state')?.invalid && form.get('state')?.touched"
+        />
+        @if (form.get('state')?.invalid && form.get('state')?.touched) {
+          <span class="error-msg">State is required</span>
+        }
+      </div>
+      <div class="form-group">
+        <label for="zip">Zip Code *</label>
+        <input
+          id="zip"
+          type="text"
+          formControlName="zip"
+          placeholder="10001"
+          [class.input--error]="form.get('zip')?.invalid && form.get('zip')?.touched"
+        />
+        @if (form.get('zip')?.invalid && form.get('zip')?.touched) {
+          <span class="error-msg">Valid zip code required</span>
+        }
+      </div>
+    </div>
+
+    <label class="checkbox-save">
+      <input type="checkbox" formControlName="saveAddress" />
+      <span>Save this address to my profile</span>
+    </label>
+  </form>
+</div>
+
+<!-- Section 2: Delivery Method -->
+<div class="checkout-section">
+  <div class="section-header">
+    <div class="step-circle">2</div>
+    <h2 class="section-title">DELIVERY METHOD</h2>
+  </div>
+
+  <div class="delivery-options">
+    @for (option of deliveryOptions; track option.id) {
+      <div
+        class="delivery-option"
+        [class.delivery-option--selected]="selectedDelivery === option.id"
+        (click)="selectDelivery(option.id)"
+      >
+        <div class="delivery-option__radio">
+          <div class="radio-dot" [class.radio-dot--active]="selectedDelivery === option.id"></div>
+        </div>
+        <div class="delivery-option__info">
+          <strong>{{ option.label }}</strong>
+          <span>{{ option.desc }}</span>
+        </div>
+        <div class="delivery-option__price">
+          @if (option.price === 0) {
+            <span class="price-free">FREE</span>
+          } @else {
+            <span>${{ option.price }}</span>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

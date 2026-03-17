@@ -1,0 +1,38 @@
+<div class="related-products">
+  <h2 class="related-products__title">COMPLETE THE LOOK</h2>
+  <p class="related-products__subtitle">Gear that pairs perfectly with your selection</p>
+
+  <div class="related-products__grid">
+    @for (product of products; track product.id) {
+      <div class="related-card">
+        <div class="related-card__image-wrap">
+          <img
+            [src]="'https://picsum.photos/seed/' + product.seed + '/400/400'"
+            [alt]="product.name"
+            class="related-card__image"
+            loading="lazy"
+          />
+          <button class="related-card__wishlist">
+            <i class="far fa-heart"></i>
+          </button>
+        </div>
+        <div class="related-card__body">
+          <p class="related-card__name">{{ product.name }}</p>
+          <div class="related-card__stars">
+            @for (star of getStars(product.rating); track $index) {
+              <i class="fas"
+                [class.fa-star]="star === 'full' || star === 'empty'"
+                [class.fa-star-half-alt]="star === 'half'"
+                [class.star--empty]="star === 'empty'">
+              </i>
+            }
+          </div>
+          <div class="related-card__footer">
+            <span class="related-card__price">{{ product.price | currency }}</span>
+            <button class="btn-quick-add">Add <i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

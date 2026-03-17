@@ -1,0 +1,15 @@
+<div class="size-selector">
+  <div class="size-selector__header">
+    <span class="size-selector__label">Select Size</span>
+    <a href="#" class="size-selector__guide">Size Guide <i class="fas fa-ruler-horizontal"></i></a>
+  </div>
+  <div class="size-selector__grid">
+    @for (size of sizes; track size) {
+      <button
+        class="size-btn"
+        [class.size-btn--active]="size === selectedSize"
+        (click)="selectSize(size)"
+      >{{ size }}</button>
+    }
+  </div>
+</div>

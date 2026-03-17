@@ -1,0 +1,31 @@
+<section class="trending-section">
+  <div class="container">
+    <div class="trending-section__header">
+      <div>
+        <h2 class="section-title">Trending Now</h2>
+        <p class="section-subtitle">Bestsellers loved by athletes everywhere</p>
+      </div>
+      <a href="#" class="view-all-link">
+        View All Products <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- Tabs -->
+    <div class="trending-tabs">
+      @for (tab of tabs; track tab.key) {
+        <button
+          class="trending-tab"
+          [class.active]="activeTab() === tab.key"
+          (click)="setTab(tab.key)"
+        >{{ tab.label }}</button>
+      }
+    </div>
+
+    <!-- Product Grid -->
+    <div class="trending-grid">
+      @for (product of filteredProducts; track product.id) {
+        <app-product-card [product]="product" />
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,31 @@
+<div class="no-results">
+  <div class="no-results__icon">
+    <i class="fas fa-search"></i>
+  </div>
+
+  <h2 class="no-results__title">No Results Found</h2>
+
+  @if (query) {
+    <p class="no-results__query">We couldn't find anything matching "<strong>{{ query }}</strong>"</p>
+  }
+
+  <div class="no-results__suggestions">
+    <h4>Suggestions:</h4>
+    <ul>
+      @for (suggestion of suggestions; track suggestion) {
+        <li><i class="fas fa-arrow-right"></i> {{ suggestion }}</li>
+      }
+    </ul>
+  </div>
+
+  <div class="no-results__popular">
+    <h4>Popular Searches:</h4>
+    <div class="popular-tags">
+      @for (term of popularSearches; track term) {
+        <a routerLink="/search" class="popular-tag">{{ term }}</a>
+      }
+    </div>
+  </div>
+
+  <a routerLink="/products" class="btn-browse">Browse All Products</a>
+</div>

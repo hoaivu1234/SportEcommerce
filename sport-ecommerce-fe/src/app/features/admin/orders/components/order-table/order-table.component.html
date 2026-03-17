@@ -1,0 +1,59 @@
+<div class="table-wrapper">
+  <table class="orders-table">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Payment</th>
+        <th>Total</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (order of orders; track order.id) {
+        <tr>
+          <td class="order-id">{{ order.id }}</td>
+          <td>
+            <div class="customer-cell">
+              <div class="customer-initials">{{ order.initials }}</div>
+              <span>{{ order.customer }}</span>
+            </div>
+          </td>
+          <td class="date-cell">{{ order.date }}</td>
+          <td>
+            <span class="status-badge badge-{{ order.statusClass }}">{{ order.status }}</span>
+          </td>
+          <td class="payment-cell">{{ order.payment }}</td>
+          <td class="total-cell">{{ order.total }}</td>
+          <td>
+            <div class="action-btns">
+              <button class="action-btn" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-btn" title="More">
+                <i class="fas fa-ellipsis-vertical"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination-row">
+  <span class="results-info">Showing {{ orders.length }} results</span>
+  <div class="pagination">
+    <button class="page-btn" disabled>
+      <i class="fas fa-chevron-left"></i> Previous
+    </button>
+    <button class="page-num active">1</button>
+    <button class="page-num">2</button>
+    <button class="page-num">3</button>
+    <button class="page-btn">
+      Next <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,65 @@
+<div class="search-page">
+  <!-- Search Bar -->
+  <div class="search-hero">
+    <div class="container">
+      <form class="search-form" (ngSubmit)="onSearch()">
+        <div class="search-input-wrap">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            name="search"
+            class="search-input"
+            placeholder="Search for products..."
+          />
+          <button type="submit" class="search-submit">Search</button>
+        </div>
+      </form>
+      @if (hasResults) {
+        <p class="search-count">
+          <span class="search-count__number">{{ totalResults | number }}</span>
+          Results for '<strong>{{ searchQuery }}</strong>'
+        </p>
+      }
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    @if (hasResults) {
+      <div class="search-layout">
+        <app-filter-sidebar />
+        <div class="search-main">
+          <app-search-results-grid [products]="products" [query]="searchQuery" />
+        </div>
+      </div>
+
+      <!-- Recommended Section -->
+      <section class="recommended-section">
+        <h2 class="recommended-section__title">RECOMMENDED FOR YOU</h2>
+        <p class="recommended-section__subtitle">Based on your search</p>
+
+        <div class="recommended-scroll">
+          @for (product of recommendedProducts; track product.id) {
+            <div class="rec-card">
+              <div class="rec-card__image-wrap">
+                <img
+                  [src]="'https://picsum.photos/seed/' + product.seed + '/300/300'"
+                  [alt]="product.name"
+                  class="rec-card__image"
+                  loading="lazy"
+                />
+              </div>
+              <div class="rec-card__body">
+                <p class="rec-card__name">{{ product.name }}</p>
+                <span class="rec-card__price">{{ product.price | currency }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+    } @else {
+      <app-no-results [query]="searchQuery" />
+    }
+  </div>
+</div>

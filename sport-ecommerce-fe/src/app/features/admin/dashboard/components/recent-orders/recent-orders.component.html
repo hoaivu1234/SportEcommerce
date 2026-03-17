@@ -1,0 +1,41 @@
+<div class="orders-card">
+  <div class="card-header">
+    <h3 class="card-title">Recent Orders</h3>
+    <a href="#" class="manage-link">Manage All Orders <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <div class="table-wrapper">
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Payment</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of orders; track order.id) {
+          <tr>
+            <td class="order-id">{{ order.id }}</td>
+            <td>
+              <div class="customer-cell">
+                <div class="customer-avatar">
+                  <i class="fas fa-user"></i>
+                </div>
+                <span>{{ order.customer }}</span>
+              </div>
+            </td>
+            <td class="time-cell">{{ order.time }}</td>
+            <td>
+              <span class="status-badge badge-{{ order.statusClass }}">{{ order.status }}</span>
+            </td>
+            <td class="payment-cell">{{ order.payment }}</td>
+            <td class="total-cell">{{ order.total }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

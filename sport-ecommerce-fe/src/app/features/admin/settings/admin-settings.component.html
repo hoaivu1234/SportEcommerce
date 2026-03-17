@@ -1,0 +1,50 @@
+<div class="settings-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Store Settings</h1>
+      <p class="page-subtitle">Configure global parameters and administrative controls for ActiveGear.</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-ghost">Discard</button>
+      <button class="btn btn-primary">
+        <i class="fas fa-floppy-disk"></i> Save Changes
+      </button>
+    </div>
+  </div>
+
+  <div class="settings-layout">
+    <!-- Nav -->
+    <aside class="settings-nav">
+      @for (item of navItems; track item.key) {
+        <button
+          class="settings-nav-item"
+          [class.active]="activeNav() === item.key"
+          (click)="activeNav.set(item.key)"
+        >
+          <i class="fas {{ item.icon }}"></i>
+          <span>{{ item.label }}</span>
+        </button>
+      }
+    </aside>
+
+    <!-- Content -->
+    <div class="settings-content">
+      @if (activeNav() === 'general') {
+        <app-general-settings></app-general-settings>
+      }
+      @if (activeNav() === 'shipping') {
+        <app-shipping-settings></app-shipping-settings>
+      }
+      @if (activeNav() !== 'general' && activeNav() !== 'shipping') {
+        <div class="coming-soon">
+          <div class="cs-icon-wrap">
+            <i class="fas fa-tools cs-icon"></i>
+          </div>
+          <h3>Coming Soon</h3>
+          <p>This section is under development.</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>

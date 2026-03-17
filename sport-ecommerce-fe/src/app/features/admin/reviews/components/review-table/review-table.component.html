@@ -1,0 +1,41 @@
+<div class="reviews-list">
+  @for (review of reviews; track review.name) {
+    <div class="review-card">
+      <div class="review-header">
+        <div class="reviewer-info">
+          <div class="reviewer-avatar">{{ review.initials }}</div>
+          <div>
+            <div class="reviewer-name">
+              {{ review.name }}
+              <span class="verified-badge">
+                <i class="fas fa-check-circle"></i> Verified Purchase
+              </span>
+            </div>
+            <div class="stars-row">
+              @for (star of getStars(review.rating); track star) {
+                <i
+                  class="fas fa-star star-icon"
+                  [class.filled]="star <= review.rating"
+                ></i>
+              }
+            </div>
+          </div>
+        </div>
+        <div class="review-actions">
+          @if (review.isPending) {
+            <button class="action-btn approve-btn">
+              <i class="fas fa-check"></i> Approve
+            </button>
+          }
+          <button class="action-btn report-btn">
+            <i class="fas fa-flag"></i> Report
+          </button>
+        </div>
+      </div>
+      <div class="review-product">
+        <i class="fas fa-tag"></i> {{ review.product }}
+      </div>
+      <p class="review-text">"{{ review.text }}"</p>
+    </div>
+  }
+</div>

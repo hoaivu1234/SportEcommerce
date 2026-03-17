@@ -1,0 +1,54 @@
+<div class="products-page">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <span class="breadcrumb-item">Catalog Management</span>
+    <i class="fas fa-chevron-right breadcrumb-sep"></i>
+    <span class="breadcrumb-item active">Products</span>
+  </div>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Product Inventory</h1>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary">
+        <i class="fas fa-file-csv"></i> Export CSV
+      </button>
+      <button class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add New Product
+      </button>
+    </div>
+  </div>
+
+  <!-- Mini Stats -->
+  <div class="mini-stats-grid">
+    @for (stat of miniStats; track stat.label) {
+      <div class="mini-stat-card">
+        <div class="mini-stat-value">{{ stat.value }}</div>
+        <div class="mini-stat-label">{{ stat.label }}</div>
+        <div class="mini-stat-note note-{{ stat.noteClass }}">{{ stat.note }}</div>
+      </div>
+    }
+  </div>
+
+  <!-- Table Card -->
+  <div class="table-card">
+    <div class="table-controls">
+      <div class="search-wrapper">
+        <i class="fas fa-search search-icon"></i>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search products..."
+          [(ngModel)]="searchQuery"
+        />
+      </div>
+      <button class="btn btn-secondary">
+        <i class="fas fa-sliders"></i> Filters
+      </button>
+    </div>
+
+    <app-product-table></app-product-table>
+  </div>
+</div>

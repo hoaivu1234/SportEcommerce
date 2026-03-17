@@ -1,0 +1,44 @@
+<div class="product-card">
+  <div class="product-card__image-wrap">
+    <a [routerLink]="['/products', product.id]">
+      <img
+        [src]="product.image"
+        [alt]="product.name"
+        class="product-card__image"
+        loading="lazy"
+      />
+    </a>
+
+    @if (product.badge) {
+      <span class="product-card__badge" [class.badge--sale]="product.badge === 'SALE'" [class.badge--new]="product.badge === 'NEW'">
+        {{ product.badge }}
+      </span>
+    }
+
+    <div class="product-card__actions">
+      <button class="product-card__action-btn" title="Add to wishlist">
+        <i class="far fa-heart"></i>
+      </button>
+      <button class="product-card__action-btn" title="Quick view">
+        <i class="far fa-eye"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="product-card__info">
+    <span class="product-card__category">{{ product.category }}</span>
+    <h3 class="product-card__name">
+      <a [routerLink]="['/products', product.id]">{{ product.name }}</a>
+    </h3>
+    <app-rating [value]="product.rating" [showCount]="true" [count]="product.reviewCount" />
+    <div class="product-card__price-row">
+      <span class="product-card__price">${{ product.price.toFixed(2) }}</span>
+      @if (product.originalPrice) {
+        <span class="product-card__original">${{ product.originalPrice.toFixed(2) }}</span>
+      }
+    </div>
+    <button class="product-card__add-btn">
+      <i class="fas fa-shopping-bag"></i> Add to Cart
+    </button>
+  </div>
+</div>

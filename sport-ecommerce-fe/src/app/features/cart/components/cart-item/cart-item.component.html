@@ -1,0 +1,41 @@
+<div class="cart-item">
+  <div class="cart-item__image-wrap">
+    <img
+      [src]="'https://picsum.photos/seed/' + item.seed + '/200/200'"
+      [alt]="item.name"
+      class="cart-item__image"
+    />
+  </div>
+
+  <div class="cart-item__details">
+    <div class="cart-item__top">
+      <div>
+        <h4 class="cart-item__name">{{ item.name }}</h4>
+        <div class="cart-item__meta">
+          @if (item.size) {
+            <span>Size: {{ item.size }}</span>
+          }
+          @if (item.color) {
+            <span>Color: {{ item.color }}</span>
+          }
+        </div>
+      </div>
+      <button class="cart-item__remove" (click)="removeItem()" title="Remove item">
+        <i class="fas fa-trash-alt"></i>
+      </button>
+    </div>
+
+    <div class="cart-item__bottom">
+      <div class="qty-control">
+        <button class="qty-btn" (click)="decreaseQty()" [disabled]="item.quantity <= 1">
+          <i class="fas fa-minus"></i>
+        </button>
+        <span class="qty-value">{{ item.quantity }}</span>
+        <button class="qty-btn" (click)="increaseQty()">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+      <span class="cart-item__price">{{ lineTotal | currency }}</span>
+    </div>
+  </div>
+</div>

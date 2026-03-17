@@ -1,0 +1,33 @@
+<div class="product-images">
+  <div class="product-images__main">
+    <img [src]="mainImage" alt="Product Main Image" class="product-images__main-img" />
+  </div>
+
+  <div class="product-images__thumbnails">
+    @for (thumb of thumbnails; track $index) {
+      <button
+        class="product-images__thumb-btn"
+        [class.product-images__thumb-btn--active]="selectedIndex === $index"
+        (click)="selectThumbnail($index, thumb)"
+      >
+        <img [src]="thumb" [alt]="'Product view ' + ($index + 1)" class="product-images__thumb-img" />
+      </button>
+    }
+  </div>
+
+  <!-- Feature Badges -->
+  <div class="feature-badges">
+    <div class="feature-badge">
+      <i class="fas fa-shield-alt"></i>
+      <span>2 Year Warranty</span>
+    </div>
+    <div class="feature-badge">
+      <i class="fas fa-shipping-fast"></i>
+      <span>Free Shipping</span>
+    </div>
+    <div class="feature-badge">
+      <i class="fas fa-undo-alt"></i>
+      <span>30 Day Trial</span>
+    </div>
+  </div>
+</div>

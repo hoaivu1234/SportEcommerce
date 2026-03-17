@@ -1,0 +1,163 @@
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.category-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.category-table th {
+  text-align: left;
+  padding: 11px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--color-border);
+  background: #f8f9fa;
+}
+
+.category-table td {
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.category-table tbody tr:hover {
+  background: var(--color-light-gray);
+}
+
+.cat-name {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.cat-icon {
+  color: var(--color-gray);
+  font-size: 12px;
+}
+
+.product-count {
+  font-weight: 500;
+  color: var(--color-dark);
+}
+
+.visibility {
+  font-size: 12px;
+  color: var(--color-gray);
+}
+
+.status-badge {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badge-active {
+  background: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+}
+
+.badge-draft {
+  background: rgba(100, 116, 139, 0.12);
+  color: #64748b;
+}
+
+.action-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.action-btn {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  transition: all 0.2s;
+}
+
+.archive-btn {
+  color: var(--color-gray);
+}
+
+.archive-btn:hover {
+  background: var(--color-light-gray);
+}
+
+.edit-btn {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.edit-btn:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px;
+  border-top: 1px solid var(--color-border);
+}
+
+.showing-text {
+  font-size: 12px;
+  color: var(--color-gray);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.page-btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  transition: all 0.2s;
+  color: var(--color-dark);
+}
+
+.page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.page-num {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: var(--color-dark);
+}
+
+.page-num.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}

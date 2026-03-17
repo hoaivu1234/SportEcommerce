@@ -1,0 +1,240 @@
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.product-table th {
+  text-align: left;
+  padding: 12px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--color-border);
+  white-space: nowrap;
+  background: #f8f9fa;
+}
+
+.product-table td {
+  padding: 14px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.product-table tbody tr:hover {
+  background: var(--color-light-gray);
+}
+
+.product-table tbody tr.selected {
+  background: rgba(232, 82, 26, 0.04);
+}
+
+.col-check {
+  width: 40px;
+}
+
+.col-check input[type="checkbox"] {
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+}
+
+.product-img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  display: block;
+}
+
+.product-name {
+  font-weight: 600;
+  color: var(--color-dark);
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+.product-category {
+  font-size: 11px;
+  color: var(--color-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.sku-code {
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--color-gray);
+  background: var(--color-light-gray);
+  padding: 3px 7px;
+  border-radius: 4px;
+}
+
+.price {
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.stock-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 100px;
+}
+
+.stock-count {
+  font-size: 12px;
+  color: var(--color-dark);
+  font-weight: 500;
+}
+
+.stock-bar-bg {
+  width: 100%;
+  height: 5px;
+  background: var(--color-border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.stock-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.stock-bar-green { background: #22c55e; }
+.stock-bar-orange { background: #f59e0b; }
+.stock-bar-red { background: #ef4444; }
+
+.status-badge {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-active {
+  background: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+}
+
+.badge-low-stock {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+}
+
+.badge-sold-out {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+}
+
+.badge-draft {
+  background: rgba(100, 116, 139, 0.12);
+  color: #64748b;
+}
+
+.action-btns {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.action-btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-gray);
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.action-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: rgba(232, 82, 26, 0.05);
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 14px 4px;
+  border-top: 1px solid var(--color-border);
+  margin-top: 4px;
+}
+
+.page-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--color-dark);
+  transition: all 0.2s;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: var(--color-light-gray);
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-numbers {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.page-num {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: var(--color-dark);
+}
+
+.page-num.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.page-num:hover:not(.active) {
+  background: var(--color-light-gray);
+}
+
+.page-ellipsis {
+  color: var(--color-gray);
+  padding: 0 4px;
+}

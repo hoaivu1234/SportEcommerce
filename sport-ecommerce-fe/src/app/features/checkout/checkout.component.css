@@ -1,0 +1,10 @@
+.checkout-page { min-height:100vh; background:#f8f9fa; }
+.checkout-header { display:flex; align-items:center; justify-content:space-between; padding:16px 40px; background:#fff; border-bottom:1px solid var(--color-border); }
+.checkout-logo { display:flex; align-items:center; gap:8px; }
+.logo-icon { width:30px; height:30px; background:var(--color-primary); border-radius:6px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px; }
+.logo-text { font-family:var(--font-condensed); font-weight:700; font-size:1.1rem; letter-spacing:2px; text-transform:uppercase; }
+.logo-accent { color:var(--color-primary); }
+.checkout-secure { font-size:.82rem; color:var(--color-gray); display:flex; align-items:center; gap:6px; }
+.checkout-body { max-width:1100px; margin:0 auto; padding:40px 24px; display:grid; grid-template-columns:1fr 400px; gap:40px; align-items:start; }
+.checkout-form-col { display:flex; flex-direction:column; gap:0; }
+@media(max-width:900px){ .checkout-body{ grid-template-columns:1fr; } .checkout-summary-col{ order:-1; } }
