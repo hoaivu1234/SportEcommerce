@@ -1,0 +1,64 @@
+<div class="profile-info">
+  <div class="content-header">
+    <h2 class="content-title">PROFILE SETTINGS</h2>
+  </div>
+
+  @if (saved) {
+    <div class="success-banner">
+      <i class="fas fa-check-circle"></i> Profile updated successfully!
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSave()" class="settings-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="piFirstName">First Name *</label>
+        <input
+          id="piFirstName"
+          type="text"
+          formControlName="firstName"
+          [class.input--error]="form.get('firstName')?.invalid && form.get('firstName')?.touched"
+        />
+        @if (form.get('firstName')?.invalid && form.get('firstName')?.touched) {
+          <span class="error-msg">Required</span>
+        }
+      </div>
+      <div class="form-group">
+        <label for="piLastName">Last Name *</label>
+        <input
+          id="piLastName"
+          type="text"
+          formControlName="lastName"
+          [class.input--error]="form.get('lastName')?.invalid && form.get('lastName')?.touched"
+        />
+        @if (form.get('lastName')?.invalid && form.get('lastName')?.touched) {
+          <span class="error-msg">Required</span>
+        }
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="piEmail">Email Address *</label>
+      <input
+        id="piEmail"
+        type="email"
+        formControlName="email"
+        [class.input--error]="form.get('email')?.invalid && form.get('email')?.touched"
+      />
+      @if (form.get('email')?.invalid && form.get('email')?.touched) {
+        <span class="error-msg">Valid email required</span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="piPhone">Phone Number</label>
+      <input id="piPhone" type="tel" formControlName="phone" />
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="save-btn">
+        <i class="fas fa-save"></i> Save Changes
+      </button>
+    </div>
+  </form>
+</div>

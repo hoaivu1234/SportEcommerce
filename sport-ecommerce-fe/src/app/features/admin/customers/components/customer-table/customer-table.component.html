@@ -1,0 +1,57 @@
+<div class="table-wrapper">
+  <table class="customer-table">
+    <thead>
+      <tr>
+        <th>Customer</th>
+        <th>Status</th>
+        <th>Orders</th>
+        <th>LTV</th>
+        <th>Joined</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (customer of customers; track customer.name) {
+        <tr>
+          <td>
+            <div class="customer-cell">
+              <div class="customer-initials status-bg-{{ customer.statusClass }}">{{ customer.initials }}</div>
+              <span class="customer-name">{{ customer.name }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="status-badge badge-{{ customer.statusClass }}">{{ customer.status }}</span>
+          </td>
+          <td class="orders-count">{{ customer.orders }}</td>
+          <td class="ltv">{{ customer.ltv }}</td>
+          <td class="joined-date">{{ customer.joined }}</td>
+          <td>
+            <div class="action-btns">
+              <button class="action-btn" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-btn" title="Edit">
+                <i class="fas fa-pen"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<div class="pagination-row">
+  <span class="results-info">Showing {{ customers.length }} of 12,642 customers</span>
+  <div class="pagination">
+    <button class="page-btn" disabled>
+      <i class="fas fa-chevron-left"></i> Previous
+    </button>
+    <button class="page-num active">1</button>
+    <button class="page-num">2</button>
+    <button class="page-num">3</button>
+    <button class="page-btn">
+      Next <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+</div>

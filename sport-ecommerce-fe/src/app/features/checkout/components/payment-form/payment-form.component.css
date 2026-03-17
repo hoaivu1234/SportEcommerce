@@ -1,0 +1,233 @@
+.checkout-section {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 28px;
+  margin-bottom: 20px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-dark);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-family: var(--font-condensed);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--color-dark);
+}
+
+.payment-tabs {
+  display: flex;
+  border: 1.5px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.payment-tab {
+  flex: 1;
+  padding: 12px;
+  background: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  border-right: 1.5px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background var(--transition), color var(--transition);
+  color: var(--color-gray);
+}
+
+.payment-tab:last-child {
+  border-right: none;
+}
+
+.payment-tab--active {
+  background: var(--color-dark);
+  color: #fff;
+}
+
+.card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--color-gray);
+}
+
+.form-group input {
+  padding: 12px 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 8px;
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  color: var(--color-dark);
+  outline: none;
+  transition: border-color var(--transition);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  border-color: var(--color-primary);
+}
+
+.input--error {
+  border-color: #e74c3c !important;
+}
+
+.error-msg {
+  font-size: 0.75rem;
+  color: #e74c3c;
+}
+
+.card-input-wrap {
+  position: relative;
+}
+
+.card-input-wrap input {
+  padding-right: 80px;
+}
+
+.card-icons {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 6px;
+  font-size: 1.4rem;
+  color: var(--color-gray);
+}
+
+.cvv-wrap {
+  position: relative;
+}
+
+.cvv-wrap input {
+  padding-right: 44px;
+}
+
+.toggle-cvv {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-gray);
+  font-size: 0.9rem;
+}
+
+.security-notice {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 14px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: var(--color-gray);
+  line-height: 1.5;
+}
+
+.security-notice i {
+  color: #27ae60;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.alt-payment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px 20px;
+  gap: 16px;
+}
+
+.paypal-icon, .apple-icon {
+  font-size: 3rem;
+}
+
+.paypal-icon { color: #003087; }
+.apple-icon { color: #000; }
+
+.alt-payment p {
+  color: var(--color-gray);
+  font-size: 0.9rem;
+  max-width: 320px;
+}
+
+.btn-paypal {
+  padding: 12px 28px;
+  background: #003087;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background var(--transition);
+}
+
+.btn-paypal:hover { background: #002066; }
+
+.btn-apple {
+  padding: 12px 28px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background var(--transition);
+}
+
+.btn-apple:hover { background: #222; }

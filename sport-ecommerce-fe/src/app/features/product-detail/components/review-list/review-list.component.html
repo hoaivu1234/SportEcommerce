@@ -1,0 +1,65 @@
+<div class="review-list">
+  <h2 class="review-list__title">CUSTOMER FEEDBACK</h2>
+
+  <div class="review-list__summary">
+    <div class="review-summary__score">
+      <span class="score-number">{{ avgRating }}</span>
+      <div class="score-stars">
+        @for (star of getStars(avgRating); track $index) {
+          <i class="fas"
+            [class.fa-star]="star === 'full' || star === 'empty'"
+            [class.fa-star-half-alt]="star === 'half'"
+            [class.star--empty]="star === 'empty'">
+          </i>
+        }
+      </div>
+      <span class="score-count">{{ totalReviews }} Reviews</span>
+    </div>
+
+    <div class="review-summary__breakdown">
+      @for (row of ratingBreakdown; track row.stars) {
+        <div class="breakdown-row">
+          <span class="breakdown-label">{{ row.stars }} <i class="fas fa-star"></i></span>
+          <div class="breakdown-bar">
+            <div class="breakdown-bar__fill" [style.width.%]="row.percent"></div>
+          </div>
+          <span class="breakdown-pct">{{ row.percent }}%</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="review-list__cards">
+    @for (review of reviews; track review.id) {
+      <div class="review-card">
+        <div class="review-card__header">
+          <img [src]="review.avatar" [alt]="review.author" class="review-card__avatar" />
+          <div class="review-card__meta">
+            <div class="review-card__author-row">
+              <span class="review-card__author">{{ review.author }}</span>
+              @if (review.verified) {
+                <span class="verified-badge">
+                  <i class="fas fa-check-circle"></i> Verified Purchase
+                </span>
+              }
+            </div>
+            <div class="review-card__stars">
+              @for (star of getStars(review.rating); track $index) {
+                <i class="fas"
+                  [class.fa-star]="star === 'full' || star === 'empty'"
+                  [class.fa-star-half-alt]="star === 'half'"
+                  [class.star--empty]="star === 'empty'">
+                </i>
+              }
+            </div>
+            <span class="review-card__date">{{ review.date }}</span>
+          </div>
+        </div>
+        <h4 class="review-card__title">{{ review.title }}</h4>
+        <p class="review-card__body">{{ review.body }}</p>
+      </div>
+    }
+  </div>
+
+  <button class="btn-load-reviews">Load More Reviews</button>
+</div>

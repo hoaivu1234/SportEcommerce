@@ -1,0 +1,65 @@
+<footer class="footer">
+  <div class="footer__top">
+    <div class="container footer__grid">
+      <!-- Brand -->
+      <div class="footer__brand">
+        <div class="footer__logo">
+          <span class="logo-icon"><i class="fas fa-bolt"></i></span>
+          <span class="logo-text">SPORT<span class="logo-accent">SHOP</span></span>
+        </div>
+        <p class="footer__tagline">
+          Elevate your performance with premium sports gear. From track to trail,
+          we've got you covered.
+        </p>
+        <div class="footer__social">
+          <a href="#" class="footer__social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="footer__social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="footer__social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="footer__social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <!-- Shop -->
+      <div class="footer__col">
+        <h4 class="footer__col-title">Shop</h4>
+        <ul>
+          @for (link of shopLinks; track link) {
+            <li><a href="#" class="footer__link">{{ link }}</a></li>
+          }
+        </ul>
+      </div>
+
+      <!-- Help -->
+      <div class="footer__col">
+        <h4 class="footer__col-title">Help</h4>
+        <ul>
+          @for (link of helpLinks; track link) {
+            <li><a href="#" class="footer__link">{{ link }}</a></li>
+          }
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div class="footer__col">
+        <h4 class="footer__col-title">Company</h4>
+        <ul>
+          @for (link of companyLinks; track link) {
+            <li><a href="#" class="footer__link">{{ link }}</a></li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    <div class="container footer__bottom-inner">
+      <p class="footer__copy">&copy; {{ currentYear }} SportShop. All rights reserved.</p>
+      <div class="footer__payment">
+        <i class="fab fa-cc-visa"></i>
+        <i class="fab fa-cc-mastercard"></i>
+        <i class="fab fa-cc-paypal"></i>
+        <i class="fab fa-cc-amex"></i>
+      </div>
+    </div>
+  </div>
+</footer>

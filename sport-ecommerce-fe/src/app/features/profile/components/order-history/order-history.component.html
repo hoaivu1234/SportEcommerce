@@ -1,0 +1,29 @@
+<div class="order-history">
+  <div class="content-header">
+    <h2 class="content-title">RECENT ORDERS</h2>
+    <a routerLink="/products" class="browse-link">
+      Browse Store <i class="fas fa-arrow-right"></i>
+    </a>
+  </div>
+
+  <div class="orders-list">
+    @for (order of orders; track order.id) {
+      <div class="order-row">
+        <img [src]="order.image" [alt]="order.id" class="order-row__img" />
+        <div class="order-row__info">
+          <p class="order-id">Order #{{ order.id }}</p>
+          <p class="order-meta">{{ order.date }} &middot; {{ order.itemCount }} items</p>
+        </div>
+        <span class="order-status" [class]="'order-status status-' + order.statusClass">
+          {{ order.status }}
+        </span>
+        <span class="order-price">${{ order.price.toFixed(2) }}</span>
+        <a href="#" class="order-details-link">Details <i class="fas fa-chevron-right"></i></a>
+      </div>
+    }
+  </div>
+
+  <button class="load-more-btn">
+    <i class="fas fa-sync-alt"></i> Load More Orders
+  </button>
+</div>

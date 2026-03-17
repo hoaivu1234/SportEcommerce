@@ -1,0 +1,23 @@
+.export-panel {
+  display: flex;
+  gap: 8px;
+}
+
+.export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--color-dark);
+  transition: all 0.2s;
+}
+
+.export-btn:hover {
+  background: var(--color-light-gray);
+}

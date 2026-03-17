@@ -1,0 +1,38 @@
+<div class="product-report-card">
+  <div class="card-header">
+    <h3 class="card-title">Top Performing Products</h3>
+    <p class="card-subtitle">Based on revenue generated this period</p>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Product</th>
+          <th>Category</th>
+          <th>Units Sold</th>
+          <th>Revenue</th>
+          <th>Growth</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (product of products; track product.name; let i = $index) {
+          <tr>
+            <td class="rank">{{ i + 1 }}</td>
+            <td class="product-name">{{ product.name }}</td>
+            <td class="category">{{ product.category }}</td>
+            <td class="units">{{ product.units | number }}</td>
+            <td class="revenue">{{ product.revenue }}</td>
+            <td>
+              <span class="growth" [class.positive]="product.positive" [class.negative]="!product.positive">
+                <i class="fas" [class.fa-arrow-trend-up]="product.positive" [class.fa-arrow-trend-down]="!product.positive"></i>
+                {{ product.growth }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

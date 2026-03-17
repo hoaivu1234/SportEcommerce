@@ -1,0 +1,65 @@
+<div class="search-results-grid">
+  <div class="results-grid">
+    @for (product of products; track product.id) {
+      <div class="result-card">
+        <div class="result-card__image-wrap">
+          <img
+            [src]="'https://picsum.photos/seed/' + product.seed + '/400/400'"
+            [alt]="product.name"
+            class="result-card__image"
+            loading="lazy"
+          />
+          @if (product.badge) {
+            <span class="result-card__badge">{{ product.badge }}</span>
+          }
+          <button class="result-card__wishlist">
+            <i class="far fa-heart"></i>
+          </button>
+        </div>
+        <div class="result-card__body">
+          <p class="result-card__name">{{ product.name }}</p>
+          <div class="result-card__stars">
+            @for (star of getStars(product.rating); track $index) {
+              <i class="fas"
+                [class.fa-star]="star === 'full' || star === 'empty'"
+                [class.fa-star-half-alt]="star === 'half'"
+                [class.star--empty]="star === 'empty'">
+              </i>
+            }
+          </div>
+          <div class="result-card__footer">
+            <span class="result-card__price">{{ product.price | currency }}</span>
+            <button class="btn-add-cart">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <button
+      class="pagination__btn"
+      [disabled]="currentPage === 1"
+      (click)="goToPage(currentPage - 1)"
+    >
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    @for (page of pages; track page) {
+      <button
+        class="pagination__page"
+        [class.pagination__page--active]="page === currentPage"
+        (click)="goToPage(page)"
+      >{{ page }}</button>
+    }
+    <button
+      class="pagination__btn"
+      [disabled]="currentPage === totalPages"
+      (click)="goToPage(currentPage + 1)"
+    >
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+</div>

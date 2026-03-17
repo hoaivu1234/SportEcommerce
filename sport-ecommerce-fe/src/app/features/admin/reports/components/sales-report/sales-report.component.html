@@ -1,0 +1,106 @@
+<div class="charts-row">
+  <!-- Revenue Trajectory -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <h3 class="chart-title">Revenue Trajectory</h3>
+        <p class="chart-subtitle">Weekly performance overview</p>
+      </div>
+      <div class="chart-toggle">
+        <button
+          class="toggle-btn"
+          [class.active]="activeToggle === 'current'"
+          (click)="setToggle('current')"
+        >Current</button>
+        <button
+          class="toggle-btn"
+          [class.active]="activeToggle === 'previous'"
+          (click)="setToggle('previous')"
+        >Previous</button>
+      </div>
+    </div>
+
+    <div class="line-chart">
+      <div class="y-axis-labels">
+        @for (label of yLabels; track label) {
+          <span>{{ label }}</span>
+        }
+      </div>
+      <div class="chart-svg-wrap">
+        <svg viewBox="0 0 420 120" preserveAspectRatio="none" class="chart-svg">
+          <!-- Grid lines -->
+          <line x1="0" y1="0" x2="420" y2="0" stroke="#e0e0e0" stroke-width="0.5"/>
+          <line x1="0" y1="24" x2="420" y2="24" stroke="#e0e0e0" stroke-width="0.5"/>
+          <line x1="0" y1="48" x2="420" y2="48" stroke="#e0e0e0" stroke-width="0.5"/>
+          <line x1="0" y1="72" x2="420" y2="72" stroke="#e0e0e0" stroke-width="0.5"/>
+          <line x1="0" y1="96" x2="420" y2="96" stroke="#e0e0e0" stroke-width="0.5"/>
+          <line x1="0" y1="120" x2="420" y2="120" stroke="#e0e0e0" stroke-width="0.5"/>
+
+          <!-- Previous period (dashed) -->
+          @if (activeToggle === 'previous') {
+            <polyline
+              [attr.points]="previousPoints"
+              fill="none"
+              stroke="#3b82f6"
+              stroke-width="2"
+              stroke-dasharray="4,3"
+              opacity="0.7"
+            />
+          }
+
+          <!-- Current period -->
+          <defs>
+            <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#e8521a" stop-opacity="0.2"/>
+              <stop offset="100%" stop-color="#e8521a" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          @if (activeToggle === 'current') {
+            <polygon
+              [attr.points]="currentPoints + ' 420,120 0,120'"
+              fill="url(#lineGrad)"
+            />
+            <polyline
+              [attr.points]="currentPoints"
+              fill="none"
+              stroke="#e8521a"
+              stroke-width="2.5"
+              stroke-linejoin="round"
+              stroke-linecap="round"
+            />
+          }
+        </svg>
+        <div class="x-axis-labels">
+          @for (label of xLabels; track label) {
+            <span>{{ label }}</span>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Revenue Distribution (Donut) -->
+  <div class="donut-card">
+    <h3 class="chart-title">Revenue Distribution</h3>
+    <p class="chart-subtitle">By product category</p>
+
+    <div class="donut-wrapper">
+      <div class="donut" [style.background]="getConicGradient()">
+        <div class="donut-center">
+          <span class="donut-total">100%</span>
+          <span class="donut-label">Total</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="donut-legend">
+      @for (item of donut; track item.label) {
+        <div class="legend-item">
+          <span class="legend-dot" [style.background]="item.color"></span>
+          <span class="legend-name">{{ item.label }}</span>
+          <span class="legend-percent">{{ item.percent }}%</span>
+        </div>
+      }
+    </div>
+  </div>
+</div>

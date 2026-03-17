@@ -1,0 +1,95 @@
+<div class="inventory-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Stock Management</h1>
+      <p class="page-subtitle">Monitor stock levels, manage warehouse, and track supplier performance across 4 hubs.</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary">
+        <i class="fas fa-calendar"></i> Scheduled
+      </button>
+      <button class="btn btn-primary">
+        <i class="fas fa-plus"></i> New Item
+      </button>
+    </div>
+  </div>
+
+  <!-- Purchase Order Button -->
+  <div class="po-row">
+    <button class="btn btn-outline-primary">
+      <i class="fas fa-file-invoice"></i> Create Purchase Order
+    </button>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    @for (card of statsCards; track card.label) {
+      <div class="stat-card">
+        <div class="stat-icon" [style.background]="card.iconBg">
+          <i class="fas {{ card.icon }}"></i>
+        </div>
+        <div class="stat-body">
+          <div class="stat-value">{{ card.value }}</div>
+          <div class="stat-label">{{ card.label }}</div>
+          @if (card.note) {
+            <div class="stat-note">{{ card.note }}</div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Warning Banner -->
+  <div class="warning-banner">
+    <i class="fas fa-triangle-exclamation warning-icon"></i>
+    <div>
+      <span class="warning-title">Inventory Reorder Required – </span>
+      <span class="warning-text">3 items from Nike Distribution and Armor Reorder are currently below reorder thresholds.</span>
+    </div>
+    <button class="btn btn-sm btn-warning">View Items</button>
+  </div>
+
+  <!-- Table Card -->
+  <div class="table-card">
+    <div class="table-controls">
+      <div class="filter-group">
+        <select class="filter-select">
+          <option>All Categories</option>
+          <option>Footwear</option>
+          <option>Apparel</option>
+        </select>
+        <select class="filter-select">
+          <option>All Suppliers</option>
+          <option>Nike Distribution</option>
+          <option>Under Armour</option>
+          <option>Adidas</option>
+        </select>
+        <span class="filter-tag">2 items selected <button class="filter-tag-remove">✕</button></span>
+      </div>
+      <div class="filter-actions">
+        <button class="btn btn-secondary btn-sm">
+          <i class="fas fa-download"></i> Export
+        </button>
+        <button class="btn btn-primary btn-sm">
+          <i class="fas fa-plus"></i> Add Stock Item
+        </button>
+      </div>
+    </div>
+
+    <app-inventory-table></app-inventory-table>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="bottom-bar">
+    <span class="bottom-bar-text">
+      <i class="fas fa-circle-info"></i>
+      3 items ready for update
+    </span>
+    <div class="bottom-bar-actions">
+      <button class="btn btn-secondary btn-sm">New Inventory</button>
+      <button class="btn btn-secondary btn-sm">Assign Supplier</button>
+      <button class="btn btn-danger btn-sm">Archive Selected</button>
+    </div>
+  </div>
+</div>

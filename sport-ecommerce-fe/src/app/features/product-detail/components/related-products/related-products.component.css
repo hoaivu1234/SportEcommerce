@@ -1,0 +1,133 @@
+.related-products {
+  padding: 48px 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.related-products__title {
+  font-family: var(--font-condensed);
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  margin-bottom: 4px;
+}
+
+.related-products__subtitle {
+  font-size: 0.9rem;
+  color: var(--color-gray);
+  margin-bottom: 28px;
+}
+
+.related-products__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.related-card {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.related-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-3px);
+}
+
+.related-card__image-wrap {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+.related-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.related-card:hover .related-card__image {
+  transform: scale(1.05);
+}
+
+.related-card__wishlist {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-gray);
+  opacity: 0;
+  transition: opacity var(--transition);
+  font-size: 0.85rem;
+}
+
+.related-card:hover .related-card__wishlist {
+  opacity: 1;
+}
+
+.related-card__body {
+  padding: 12px 14px 14px;
+}
+
+.related-card__name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-dark);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.related-card__stars {
+  display: flex;
+  gap: 2px;
+  color: #f5a623;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+.related-card__stars .star--empty {
+  color: #ddd;
+}
+
+.related-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.related-card__price {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.btn-quick-add {
+  padding: 6px 12px;
+  background: var(--color-dark);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background var(--transition);
+}
+
+.btn-quick-add:hover {
+  background: var(--color-primary);
+}

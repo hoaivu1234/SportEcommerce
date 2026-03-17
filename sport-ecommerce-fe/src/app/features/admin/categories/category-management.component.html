@@ -1,0 +1,72 @@
+<div class="categories-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Taxonomy</h1>
+      <p class="page-subtitle">Organize and manage your product catalog hierarchy.</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary">
+        <i class="fas fa-archive"></i> Archive Old
+      </button>
+      <button class="btn btn-primary" (click)="openModal()">
+        <i class="fas fa-plus"></i> Add Category
+      </button>
+    </div>
+  </div>
+
+  <!-- Two-Column Layout -->
+  <div class="categories-layout">
+    <!-- Left: Structure Tree -->
+    <div class="tree-panel">
+      <div class="tree-header">STRUCTURE</div>
+
+      <div class="tree-list">
+        @for (item of treeItems; track item.name) {
+          <div class="tree-node">
+            <div class="tree-node-row" (click)="toggleTree(item)">
+              <i class="fas fa-chevron-right tree-arrow" [class.expanded]="item.expanded"></i>
+              <i class="fas {{ item.icon }} tree-icon"></i>
+              <span class="tree-name">{{ item.name }}</span>
+              <span class="tree-count">{{ item.products }}</span>
+            </div>
+            @if (item.expanded && item.children.length > 0) {
+              <div class="tree-children">
+                @for (child of item.children; track child) {
+                  <div class="tree-child-row">
+                    <i class="fas fa-minus tree-child-icon"></i>
+                    <span>{{ child }}</span>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="tree-stats">
+        <div class="stat-row">
+          <span class="stat-label">Total Categories</span>
+          <span class="stat-value">24</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Empty Slots</span>
+          <span class="stat-value warning">2</span>
+        </div>
+        <a href="#" class="reports-link">View performance reports <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <!-- Right: Table -->
+    <div class="table-panel">
+      <div class="table-card">
+        <app-category-table></app-category-table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  @if (showModal) {
+    <app-category-form (close)="closeModal()"></app-category-form>
+  }
+</div>

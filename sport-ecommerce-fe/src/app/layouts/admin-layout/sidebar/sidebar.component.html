@@ -1,0 +1,32 @@
+<aside class="sidebar">
+  <div class="logo-area">
+    <div class="logo-icon">
+      <i class="fas fa-bolt"></i>
+    </div>
+    <div class="logo-text">
+      <span class="logo-sport">SPORT</span><span class="logo-shop">SHOP</span>
+      <span class="logo-admin">Admin</span>
+    </div>
+  </div>
+
+  <nav class="nav-list">
+    @for (item of navItems; track item.route) {
+      <a
+        class="nav-item"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: false }"
+      >
+        <i class="fas {{ item.icon }}"></i>
+        <span>{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+
+  <div class="sidebar-bottom">
+    <button class="sign-out-btn">
+      <i class="fas fa-arrow-right-from-bracket"></i>
+      <span>Sign Out</span>
+    </button>
+  </div>
+</aside>

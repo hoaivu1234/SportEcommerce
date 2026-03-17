@@ -1,0 +1,51 @@
+<div class="auth-page">
+  <!-- Left: Hero -->
+  <div class="auth-hero">
+    <div class="auth-hero__overlay"></div>
+    <div class="auth-hero__content">
+      <div class="auth-hero__logo">
+        <span class="logo-icon"><i class="fas fa-bolt"></i></span>
+        <span class="logo-text">SPORT<span class="logo-accent">SHOP</span></span>
+      </div>
+      <h1 class="auth-hero__title">PERFORMANCE<br>WITHOUT<br>COMPROMISE.</h1>
+      <p class="auth-hero__subtitle">Join the community of 2M+ athletes pushing their limits every single day with elite gear.</p>
+      <div class="auth-hero__footer">
+        <span>SINCE 1994</span>
+        <span class="hero-divider">—</span>
+        <span>ELITE PERFORMANCE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Form Panel -->
+  <div class="auth-form-panel">
+    <a routerLink="/" class="back-link">
+      <i class="fas fa-arrow-left"></i> Back to Shop
+    </a>
+
+    <div class="auth-form-wrap">
+      <h2 class="auth-form-title">ATHLETE PORTAL</h2>
+      <p class="auth-form-sub">Access your wishlist, orders and performance data.</p>
+
+      <!-- Mode Toggle Tabs -->
+      <div class="auth-tabs">
+        <button
+          class="auth-tab"
+          [class.auth-tab--active]="mode === 'login'"
+          (click)="switchToLogin()"
+        >Sign In</button>
+        <button
+          class="auth-tab"
+          [class.auth-tab--active]="mode === 'register'"
+          (click)="switchToRegister()"
+        >Join Now</button>
+      </div>
+
+      @if (mode === 'login') {
+        <app-login-form (switchToRegister)="switchToRegister()" />
+      } @else {
+        <app-register-form (switchToLogin)="switchToLogin()" />
+      }
+    </div>
+  </div>
+</div>

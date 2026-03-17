@@ -1,0 +1,46 @@
+<div class="moderation-panel">
+  <!-- Policy Card -->
+  <div class="panel-card">
+    <h3 class="panel-title">Moderation Policy</h3>
+    <div class="policy-list">
+      <div class="policy-item">
+        <i class="fas fa-check-circle policy-icon good"></i>
+        <span>Reviews with verified purchases are auto-approved.</span>
+      </div>
+      <div class="policy-item">
+        <i class="fas fa-exclamation-circle policy-icon warn"></i>
+        <span>Reviews with links or profanity are flagged for review.</span>
+      </div>
+      <div class="policy-item">
+        <i class="fas fa-times-circle policy-icon bad"></i>
+        <span>Reviews rated 1★ with no text are auto-held.</span>
+      </div>
+      <div class="policy-item">
+        <i class="fas fa-info-circle policy-icon info"></i>
+        <span>Manual review required for flagged content within 24hrs.</span>
+      </div>
+    </div>
+    <button class="edit-policy-btn">
+      <i class="fas fa-pen"></i> Edit Policy
+    </button>
+  </div>
+
+  <!-- Recent Actions -->
+  <div class="panel-card">
+    <h3 class="panel-title">Recent Actions</h3>
+    <div class="actions-list">
+      @for (action of recentActions; track action.name) {
+        <div class="action-item">
+          <div class="action-icon-wrap" [style.background]="action.color + '20'" [style.color]="action.color">
+            <i class="fas {{ action.icon }}"></i>
+          </div>
+          <div class="action-content">
+            <div class="action-name">{{ action.name }}</div>
+            <div class="action-desc">{{ action.action }}</div>
+          </div>
+          <div class="action-time">{{ action.time }}</div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

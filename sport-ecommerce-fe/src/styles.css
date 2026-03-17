@@ -1,1 +1,81 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global Styles - SportShop */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-primary: #e8521a;
+  --color-primary-dark: #c94010;
+  --color-dark: #1a1a1a;
+  --color-dark-2: #222222;
+  --color-dark-3: #2e2e2e;
+  --color-gray: #888888;
+  --color-light-gray: #f4f4f4;
+  --color-white: #ffffff;
+  --color-border: #e0e0e0;
+  --font-primary: 'Roboto', sans-serif;
+  --font-condensed: 'Roboto Condensed', sans-serif;
+  --transition: 0.25s ease;
+  --shadow: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-hover: 0 8px 28px rgba(0,0,0,0.18);
+}
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-primary);
+  color: var(--color-dark);
+  background: #fff;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color var(--transition);
+}
+
+ul { list-style: none; }
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section-title {
+  font-family: var(--font-condensed);
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.section-subtitle {
+  font-size: 0.9rem;
+  color: var(--color-gray);
+  margin-bottom: 32px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #aaa; }

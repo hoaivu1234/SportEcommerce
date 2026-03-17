@@ -1,0 +1,85 @@
+<div class="dashboard">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1 class="page-title">PERFORMANCE OVERVIEW</h1>
+      <p class="page-subtitle">Welcome back, Admin. Here's what's happening with your ActiveGear Store.</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary">
+        <i class="fas fa-download"></i> Export Report
+      </button>
+      <button class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add Product
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    @for (card of statsCards; track card.title) {
+      <app-stats-card
+        [title]="card.title"
+        [value]="card.value"
+        [change]="card.change"
+        [changePositive]="card.changePositive"
+        [icon]="card.icon"
+        [iconBgColor]="card.iconBgColor"
+        [subtitle]="card.subtitle"
+      ></app-stats-card>
+    }
+  </div>
+
+  <!-- Chart + Inventory Row -->
+  <div class="main-row">
+    <div class="chart-section">
+      <app-revenue-chart></app-revenue-chart>
+    </div>
+
+    <div class="inventory-section">
+      <div class="inventory-card">
+        <div class="inv-header">
+          <h3 class="inv-title">Inventory Alerts</h3>
+          <span class="inv-badge">{{ inventoryAlerts.length }} items</span>
+        </div>
+        <div class="inv-list">
+          @for (alert of inventoryAlerts; track alert.name) {
+            <div class="inv-item">
+              <div class="inv-item-info">
+                <i class="fas fa-exclamation-triangle inv-warning-icon"></i>
+                <div>
+                  <div class="inv-item-name">{{ alert.name }}</div>
+                  <div class="inv-item-units">{{ alert.units }} units left</div>
+                </div>
+              </div>
+              <button class="restock-btn">Restock</button>
+            </div>
+          }
+        </div>
+        <a href="#" class="view-inventory-link">View Full Inventory <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Orders -->
+  <app-recent-orders></app-recent-orders>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions-section">
+    <h3 class="section-title">Quick Actions</h3>
+    <div class="quick-actions-grid">
+      @for (action of quickActions; track action.title) {
+        <div class="quick-action-card">
+          <div class="qa-icon" [style.background]="action.color">
+            <i class="fas {{ action.icon }}"></i>
+          </div>
+          <div class="qa-content">
+            <div class="qa-title">{{ action.title }}</div>
+            <div class="qa-desc">{{ action.desc }}</div>
+          </div>
+          <i class="fas fa-arrow-right qa-arrow"></i>
+        </div>
+      }
+    </div>
+  </div>
+</div>

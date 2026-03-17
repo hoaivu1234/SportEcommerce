@@ -1,0 +1,78 @@
+<!-- Promo Cards Strip -->
+<section class="promo-strip">
+  <div class="container promo-strip__grid">
+    @for (card of promoCards; track card.title) {
+      <div class="promo-strip__card">
+        <div class="promo-strip__icon" [style.background]="card.color + '18'" [style.color]="card.color">
+          <i [class]="card.icon"></i>
+        </div>
+        <div>
+          <h4 class="promo-strip__title">{{ card.title }}</h4>
+          <p class="promo-strip__desc">{{ card.desc }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Join Community CTA -->
+<section class="community-cta">
+  <div class="community-cta__bg"></div>
+  <div class="container community-cta__content">
+    <div class="community-cta__text">
+      <span class="community-cta__eyebrow">Exclusive membership</span>
+      <h2 class="community-cta__title">Join the Elite<br>Community</h2>
+      <p class="community-cta__subtitle">
+        Get early access to new arrivals, exclusive discounts, and personalized training tips
+        from top athletes.
+      </p>
+      <div class="community-cta__features">
+        <span><i class="fas fa-check-circle"></i> Early access to sales</span>
+        <span><i class="fas fa-check-circle"></i> Free shipping on first order</span>
+        <span><i class="fas fa-check-circle"></i> Exclusive members-only deals</span>
+      </div>
+      <button class="community-cta__btn">
+        Become a Member <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+    <div class="community-cta__image">
+      <img
+        src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=600&q=80"
+        alt="Elite Athletes"
+      />
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter">
+  <div class="container newsletter__inner">
+    <div class="newsletter__text">
+      <h2 class="newsletter__title">Don't Miss a Beat</h2>
+      <p class="newsletter__subtitle">Subscribe for the latest drops, training tips & exclusive offers</p>
+    </div>
+    <div class="newsletter__form">
+      @if (!subscribed) {
+        <div class="newsletter__input-group">
+          <input
+            type="email"
+            [(ngModel)]="email"
+            placeholder="Enter your email address"
+            class="newsletter__input"
+          />
+          <button class="newsletter__btn" (click)="subscribe()">
+            Subscribe <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+        <p class="newsletter__disclaimer">
+          <i class="fas fa-lock"></i> No spam, ever. Unsubscribe any time.
+        </p>
+      } @else {
+        <div class="newsletter__success">
+          <i class="fas fa-check-circle"></i>
+          <p>You're in! Welcome to the SportShop community.</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>

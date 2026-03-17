@@ -1,0 +1,51 @@
+<div class="table-wrapper">
+  <table class="category-table">
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Products</th>
+        <th>Status</th>
+        <th>Visibility</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (cat of categories; track cat.name) {
+        <tr>
+          <td>
+            <div class="cat-name">
+              <i class="fas fa-tag cat-icon"></i>
+              {{ cat.name }}
+            </div>
+          </td>
+          <td class="product-count">{{ cat.products }}</td>
+          <td>
+            <span class="status-badge {{ cat.statusClass }}">{{ cat.status }}</span>
+          </td>
+          <td class="visibility">{{ cat.visibility }}</td>
+          <td>
+            <div class="action-btns">
+              <button class="action-btn archive-btn">Archive</button>
+              <button class="action-btn edit-btn">Edit</button>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<div class="table-footer">
+  <span class="showing-text">Showing 5 of 24 categories</span>
+  <div class="pagination">
+    <button class="page-btn" disabled>
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="page-num active">1</button>
+    <button class="page-num">2</button>
+    <button class="page-num">3</button>
+    <button class="page-btn">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+</div>

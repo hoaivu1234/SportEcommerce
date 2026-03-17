@@ -1,0 +1,30 @@
+<div class="order-summary">
+  <div class="os-header">
+    <h3>Order Summary</h3>
+    <span class="os-count">{{ items.length }} Items</span>
+  </div>
+  <div class="os-items">
+    @for (item of items; track item.name) {
+      <div class="os-item">
+        <img [src]="item.image" [alt]="item.name" class="os-item__img" />
+        <div class="os-item__info">
+          <p class="os-item__name">{{ item.name }}</p>
+          <p class="os-item__detail">{{ item.detail }}</p>
+        </div>
+        <span class="os-item__price">\${{ item.price.toFixed(2) }}</span>
+      </div>
+    }
+  </div>
+  <div class="os-lines">
+    <div class="os-line"><span>Subtotal</span><span>\${{ subtotal.toFixed(2) }}</span></div>
+    <div class="os-line"><span>Shipping (Standard)</span><span class="free">FREE</span></div>
+    <div class="os-line"><span>Estimated Tax</span><span>\${{ tax.toFixed(2) }}</span></div>
+  </div>
+  <div class="os-total"><span>Total</span><span>\${{ total.toFixed(2) }}</span></div>
+  <button class="place-order-btn">Place Order <i class="fas fa-arrow-right"></i></button>
+  <p class="os-guarantee"><i class="fas fa-check-circle"></i> Norton Secured · Money Back Guarantee</p>
+  <div class="os-promo">
+    <input type="text" [(ngModel)]="promoCode" placeholder="Promo Code" />
+    <button>Apply</button>
+  </div>
+</div>

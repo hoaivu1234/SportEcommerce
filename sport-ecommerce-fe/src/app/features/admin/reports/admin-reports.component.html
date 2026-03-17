@@ -1,0 +1,46 @@
+<div class="reports-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Business Intelligence</h1>
+      <p class="page-subtitle">Real-time data insights and performance distribution.</p>
+    </div>
+    <div class="header-actions">
+      <select class="filter-select">
+        <option>Last 7 Days</option>
+        <option>Last 30 Days</option>
+        <option>Last 90 Days</option>
+      </select>
+      <button class="btn btn-secondary">
+        <i class="fas fa-sliders"></i> Filters
+      </button>
+      <button class="btn btn-secondary">
+        <i class="fas fa-file-csv"></i> Export CSV
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    @for (card of statsCards; track card.label) {
+      <div class="stat-card">
+        <div class="stat-icon" [style.background]="card.iconBg">
+          <i class="fas {{ card.icon }}"></i>
+        </div>
+        <div class="stat-body">
+          <div class="stat-value">{{ card.value }}</div>
+          <div class="stat-label">{{ card.label }}</div>
+          <div class="stat-change" [class.positive]="card.positive" [class.negative]="!card.positive">
+            <i class="fas fa-arrow-trend-up"></i> {{ card.change }}
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Charts -->
+  <app-sales-report></app-sales-report>
+
+  <!-- Top Products -->
+  <app-product-report></app-product-report>
+</div>

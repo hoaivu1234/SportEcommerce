@@ -1,0 +1,76 @@
+<aside class="filter-sidebar">
+  <div class="filter-header">
+    <h3 class="filter-title">FILTERS</h3>
+    <button class="clear-btn" (click)="clearFilters()">Clear All</button>
+  </div>
+
+  <!-- Sport Type -->
+  <div class="filter-section">
+    <h4 class="filter-section__title">Sport Type</h4>
+    @for (sport of sportTypes; track sport.label) {
+      <label class="checkbox-label">
+        <input type="checkbox" [(ngModel)]="sport.checked" />
+        <span class="checkmark"></span>
+        {{ sport.label }}
+      </label>
+    }
+  </div>
+
+  <!-- Price Range -->
+  <div class="filter-section">
+    <h4 class="filter-section__title">Price Range</h4>
+    <div class="price-display">
+      <span>${{ priceMin }}</span>
+      <span>${{ priceMax }}</span>
+    </div>
+    <input
+      type="range"
+      class="price-slider"
+      min="0"
+      max="399"
+      [(ngModel)]="priceMax"
+    />
+  </div>
+
+  <!-- Size -->
+  <div class="filter-section">
+    <h4 class="filter-section__title">Size</h4>
+    <div class="size-grid">
+      @for (size of sizes; track size) {
+        <button
+          class="size-btn"
+          [class.size-btn--active]="isSizeSelected(size)"
+          (click)="toggleSize(size)"
+        >{{ size }}</button>
+      }
+    </div>
+  </div>
+
+  <!-- Color -->
+  <div class="filter-section">
+    <h4 class="filter-section__title">Color</h4>
+    <div class="color-swatches">
+      @for (color of colors; track color.name) {
+        <button
+          class="color-swatch"
+          [class.color-swatch--selected]="color.selected"
+          [style.background-color]="color.value"
+          [title]="color.name"
+          (click)="toggleColor(color)"
+        ></button>
+      }
+    </div>
+  </div>
+
+  <!-- Brand -->
+  <div class="filter-section">
+    <h4 class="filter-section__title">Brand</h4>
+    @for (brand of brands; track brand.label) {
+      <label class="checkbox-label">
+        <input type="checkbox" [(ngModel)]="brand.checked" />
+        <span class="checkmark"></span>
+        {{ brand.label }}
+      </label>
+    }
+  </div>
+</aside>
