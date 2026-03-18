@@ -77,7 +77,7 @@
       </button>
     </div>
     @if (form.get('password')?.invalid && form.get('password')?.touched) {
-      <span class="error-msg">Password must be at least 8 characters</span>
+      <span class="error-msg">Password must be at least 6 characters</span>
     }
   </div>
 
@@ -100,6 +100,22 @@
       <span class="error-msg">Passwords do not match</span>
     }
   </div>
+
+  @if (errorMessage()) {
+    <div class="error-alert" role="alert">
+      <i class="fas fa-exclamation-circle"></i>
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <!-- Submit -->
+  <button type="submit" class="btn-submit" [disabled]="isLoading()">
+    @if (isLoading()) {
+      <i class="fas fa-spinner fa-spin"></i> Signing In…
+    } @else {
+      Sign In to Account <i class="fas fa-arrow-right"></i>
+    }
+  </button>
 
   <button type="submit" class="btn-submit">
     Create Account <i class="fas fa-arrow-right"></i>

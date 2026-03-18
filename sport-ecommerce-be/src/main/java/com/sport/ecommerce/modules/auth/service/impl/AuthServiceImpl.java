@@ -4,6 +4,7 @@ import com.sport.ecommerce.exception.custom.BusinessException;
 import com.sport.ecommerce.modules.auth.dto.request.ChangePasswordRequest;
 import com.sport.ecommerce.modules.auth.dto.request.LoginRequest;
 import com.sport.ecommerce.modules.auth.dto.response.LoginResponse;
+import com.sport.ecommerce.modules.auth.dto.response.RegisterResponse;
 import com.sport.ecommerce.modules.auth.entity.RefreshToken;
 import com.sport.ecommerce.modules.auth.service.AuthService;
 import com.sport.ecommerce.modules.auth.service.RefreshTokenService;
@@ -52,7 +53,8 @@ public class AuthServiceImpl implements AuthService {
         return new LoginResponse(accessToken, refreshToken.getToken());
     }
 
-    public UserResponse register(CreateUserRequest registerRequest) {
+    @Transactional
+    public RegisterResponse register(CreateUserRequest registerRequest) {
         String email = registerRequest.getEmail();
         if (userRepository.existsByEmail(email)) {
             throw new BusinessException(HttpStatus.BAD_REQUEST.value(), "User " + " already exists with " + "email: " + email);
@@ -66,7 +68,14 @@ public class AuthServiceImpl implements AuthService {
         user.setStatus("ACTIVE");
         userRepository.save(user);
 
-        return userMapper.toResponse(user);
+        String accessToken = jwtService.generateToken(user);
+        RefreshToken refreshToken = refreshTokenService.create(user);
+        RegisterResponse registerResponse = new RegisterResponse();
+        registerResponse.setAccessToken(accessToken);
+        registerResponse.setRefreshToken(refreshToken.getToken());
+        registerResponse.setUser(userMapper.toResponse(user));
+
+        return registerResponse;
     }
 
     @Override

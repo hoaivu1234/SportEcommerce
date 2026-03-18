@@ -1,5 +1,5 @@
 export interface ApiResponse<T> {
-  success: boolean;
+  status: number;
   message: string;
   data: T;
   timestamp?: string;
@@ -8,7 +8,7 @@ export interface ApiResponse<T> {
 }
 
 export interface ApiErrorResponse {
-  success: false;
+  status: number;
   message: string;
   errorCode: string;
   timestamp: string;
