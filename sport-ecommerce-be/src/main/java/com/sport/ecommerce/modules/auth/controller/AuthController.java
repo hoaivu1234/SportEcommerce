@@ -6,6 +6,7 @@ import com.sport.ecommerce.modules.auth.dto.request.ChangePasswordRequest;
 import com.sport.ecommerce.modules.auth.dto.request.LoginRequest;
 import com.sport.ecommerce.modules.auth.dto.request.RefreshTokenRequest;
 import com.sport.ecommerce.modules.auth.dto.response.LoginResponse;
+import com.sport.ecommerce.modules.auth.dto.response.RegisterResponse;
 import com.sport.ecommerce.modules.auth.service.AuthService;
 import com.sport.ecommerce.modules.user.dto.request.CreateUserRequest;
 import com.sport.ecommerce.modules.user.dto.response.UserResponse;
@@ -30,7 +31,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<UserResponse>> login(@Valid @RequestBody CreateUserRequest registerRequest) {
+    public ResponseEntity<ApiResponse<RegisterResponse>> register(@Valid @RequestBody CreateUserRequest registerRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.created(authService.register(registerRequest)));
     }
@@ -42,7 +43,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.noContent());
     }
 
-    @PostMapping("/refresh")
+    @PostMapping("/refresh-token")
     public ResponseEntity<ApiResponse<LoginResponse>> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         return ResponseEntity.ok(ApiResponse.success(authService.refresh(refreshTokenRequest.getRefreshToken())));
     }

@@ -26,14 +26,20 @@ export class AuthService {
   login(email: string, password: string): Observable<LoginApiResponse> {
     return this.http
       .post<LoginApiResponse>(AUTH_API.LOGIN, { email, password })
-      .pipe(
-        tap(response => {
-          if (response.data?.accessToken) {
-            this.storage.setAccessToken(response.data.accessToken);
-            this.storage.setRefreshToken(response.data.refreshToken);
-          }
-        }),
-      );
+      .pipe(tap((res) => this.handleAuthResponse(res)));
+  }
+
+  register(data: any): Observable<LoginApiResponse> {
+    return this.http
+      .post<LoginApiResponse>(AUTH_API.REGISTER, data)
+      .pipe(tap((res) => this.handleAuthResponse(res)));
+  }
+
+  private handleAuthResponse(response: LoginApiResponse) {
+    if (response.data?.accessToken) {
+      this.storage.setAccessToken(response.data.accessToken);
+      this.storage.setRefreshToken(response.data.refreshToken);
+    }
   }
 
   getAccessToken(): string | null {
