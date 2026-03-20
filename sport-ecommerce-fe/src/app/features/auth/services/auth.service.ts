@@ -47,6 +47,12 @@ export class AuthService {
     }
   }
 
+  refreshToken(refreshToken: string): Observable<LoginApiResponse> {
+    return this.http
+      .post<LoginApiResponse>(AUTH_API.REFRESH, { refreshToken })
+      .pipe(tap((res) => this.handleAuthResponse(res)));
+  }
+
   getAccessToken(): string | null {
     return this.storage.getAccessToken();
   }

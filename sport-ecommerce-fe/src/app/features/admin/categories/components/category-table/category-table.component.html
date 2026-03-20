@@ -4,8 +4,7 @@
       <tr>
         <th>Category</th>
         <th>Products</th>
-        <th>Status</th>
-        <th>Visibility</th>
+        <th>Slug</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -18,11 +17,10 @@
               {{ cat.name }}
             </div>
           </td>
-          <td class="product-count">{{ cat.products }}</td>
+          <td class="product-count">{{ cat.productCount }}</td>
           <td>
-            <span class="status-badge {{ cat.statusClass }}">{{ cat.status }}</span>
+            <span class="slug-code">/{{ cat.slug }}</span>
           </td>
-          <td class="visibility">{{ cat.visibility }}</td>
           <td>
             <div class="action-btns">
               <button class="action-btn archive-btn">Archive</button>

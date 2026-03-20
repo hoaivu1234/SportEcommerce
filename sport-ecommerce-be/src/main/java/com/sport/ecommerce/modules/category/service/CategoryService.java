@@ -15,6 +15,8 @@ public interface CategoryService {
 
     CategoryResponse getCategoryById(Long id);
 
+    PageResponse<CategoryResponse> getCategoriesExcludeChildren(Pageable pageable);
+
     CategoryResponse getCategoryBySlug(String slug);
 
     CategoryResponse createCategory(CategoryRequest request);

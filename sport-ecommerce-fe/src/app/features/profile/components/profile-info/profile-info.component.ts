@@ -5,6 +5,7 @@ import { UserService } from '../../services/user.service';
 import { StorageService } from '../../../../core/services/storage/storage.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { UserStateService } from '../../services/user-state.service';
 
 @Component({
   selector: 'app-profile-info',
@@ -16,10 +17,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ProfileInfoComponent implements OnInit {
   private readonly userService = inject(UserService);
   private readonly storageService = inject(StorageService);
+  private readonly userState = inject(UserStateService);
   private readonly toastService = inject(ToastService);
   private readonly fb = inject(FormBuilder);
 
   form: FormGroup = this.fb.group({
+    id: [null],
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     phone: [''],
@@ -33,9 +36,10 @@ export class ProfileInfoComponent implements OnInit {
   }
 
   private loadProfile(): void {
-    const cached = this.storageService.getUserInfo() as any;
+    const cached = this.storageService.getUserInfo();
     if (cached) {
       this.form.patchValue({
+        id: cached.id,
         firstName: cached.firstName ?? '',
         lastName: cached.lastName ?? '',
         phone: cached.phone ?? '',
@@ -43,10 +47,11 @@ export class ProfileInfoComponent implements OnInit {
     }
 
     this.loading = true;
-    this.userService.getProfile().subscribe({
+    this.userService.getProfile(cached?.id).subscribe({
       next: (res) => {
         const user = res.data;
         this.form.patchValue({
+          id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
           phone: user.phone ?? '',
@@ -68,9 +73,9 @@ export class ProfileInfoComponent implements OnInit {
 
     this.saving = true;
     const { firstName, lastName, phone } = this.form.value;
-    this.userService.updateProfile({ firstName, lastName, phone }).subscribe({
+    this.userService.updateProfile({ firstName, lastName, phone }, this.form.value.id).subscribe({
       next: (res) => {
-        this.storageService.setUserInfo(res.data);
+        this.userState.setUser(res.data);
         this.toastService.success('Profile updated successfully!');
         this.saving = false;
       },

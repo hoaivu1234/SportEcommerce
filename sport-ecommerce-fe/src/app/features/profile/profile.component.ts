@@ -1,10 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { OrderHistoryComponent } from './components/order-history/order-history.component';
 import { ProfileInfoComponent } from './components/profile-info/profile-info.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
-import { StorageService } from '../../core/services/storage/storage.service';
+import { UserStateService } from './services/user-state.service';
 
 type ProfileTab = 'orders' | 'saved' | 'address' | 'settings' | 'security';
 
@@ -15,8 +15,10 @@ type ProfileTab = 'orders' | 'saved' | 'address' | 'settings' | 'security';
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
-export class ProfileComponent implements OnInit{
-  private readonly storageService = inject(StorageService)
+export class ProfileComponent{
+  private readonly userState = inject(UserStateService);
+
+  user = this.userState.user;
 
   activeTab: ProfileTab = 'orders';
 
@@ -30,12 +32,5 @@ export class ProfileComponent implements OnInit{
 
   setTab(tab: ProfileTab) {
     this.activeTab = tab;
-  }
-
-  user: any;
-
-  ngOnInit(): void {
-    this.user = this.storageService.getUserInfo();
-    console.log(this.user)
   }
 }

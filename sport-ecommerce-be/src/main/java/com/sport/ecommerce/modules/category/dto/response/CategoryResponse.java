@@ -22,5 +22,20 @@ public class CategoryResponse {
     private Long parentId;
     private String parentName;
     private List<CategoryResponse> children;
+    private Long productCount;
     private LocalDateTime createdAt;
+
+    public CategoryResponse(
+            Long id,
+            String name,
+            String slug,
+            Long productCount,
+            LocalDateTime createdAt
+    ) {
+        this.id = id;
+        this.name = name;
+        this.slug = slug;
+        this.productCount = productCount;
+        this.createdAt = createdAt;
+    }
 }
