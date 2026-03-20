@@ -43,6 +43,15 @@
   font-size: 12px;
 }
 
+.slug-code {
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--color-gray);
+  background: var(--color-light-gray);
+  padding: 3px 7px;
+  border-radius: 4px;
+}
+
 .product-count {
   font-weight: 500;
   color: var(--color-dark);

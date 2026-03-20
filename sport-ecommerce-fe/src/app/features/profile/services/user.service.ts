@@ -20,12 +20,12 @@ export interface ChangePasswordRequest {
 export class UserService {
   private readonly http = inject(BaseHttpService);
 
-  getProfile(): Observable<ApiResponse<UserResponse>> {
-    return this.http.get<UserResponse>(USER_API.PROFILE);
+  getProfile(id: string): Observable<ApiResponse<UserResponse>> {
+    return this.http.get<UserResponse>(USER_API.BY_ID(id));
   }
 
-  updateProfile(data: UpdateProfileRequest): Observable<ApiResponse<UserResponse>> {
-    return this.http.put<UserResponse>(USER_API.PROFILE, data);
+  updateProfile(data: UpdateProfileRequest, id: string): Observable<ApiResponse<UserResponse>> {
+    return this.http.put<UserResponse>(USER_API.BY_ID(id), data);
   }
 
   changePassword(data: ChangePasswordRequest): Observable<ApiResponse<void>> {

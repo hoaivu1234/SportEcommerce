@@ -72,14 +72,14 @@ export class StorageService {
 
   // ─── Raw string helpers (no JSON wrapping) ───────────────────────────────────
 
-  getRawLocal(key: string): any | null {
+  getRawLocal(key: string): string | null {
     const value = localStorage.getItem(key);
-    return value ? JSON.parse(value) : null;
+    return value;
   }
 
-  setRawLocal(key: string, value: any): void {
+  setRawLocal(key: string, value: string): void {
     try {
-      localStorage.setItem(key, JSON.stringify(value));
+      localStorage.setItem(key, value);
     } catch {
       // Silently handle
     }
@@ -103,12 +103,12 @@ export class StorageService {
     this.setRawLocal(AUTH_KEYS.REFRESH_TOKEN, token);
   }
 
-  getUserInfo(): string | null {
-    return this.getRawLocal(AUTH_KEYS.USER_INFO);
+  getUserInfo(): any | null {
+    return this.getLocal(AUTH_KEYS.USER_INFO);
   }
 
   setUserInfo(userInfo: UserResponse): void {
-    this.setRawLocal(AUTH_KEYS.USER_INFO, userInfo);
+    this.setLocal(AUTH_KEYS.USER_INFO, userInfo);
   }
 
   clearTokens(): void {

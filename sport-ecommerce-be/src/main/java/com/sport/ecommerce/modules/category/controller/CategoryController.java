@@ -37,6 +37,19 @@ public class CategoryController {
         return ResponseEntity.ok(ApiResponse.success(categoryService.getCategories(pageable)));
     }
 
+    @GetMapping("/flat")
+    public ResponseEntity<ApiResponse<PageResponse<CategoryResponse>>> getCategoriesExcludeChildren(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir) {
+
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return ResponseEntity.ok(ApiResponse.success(categoryService.getCategoriesExcludeChildren(pageable)));
+    }
+
     @GetMapping("/tree")
     public ResponseEntity<ApiResponse<List<CategoryResponse>>> getCategoryTree() {
         return ResponseEntity.ok(ApiResponse.success(categoryService.getRootCategoriesWithChildren()));

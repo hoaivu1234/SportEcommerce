@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../features/auth/services/auth.service';
+import { UserStateService } from '../../../features/profile/services/user-state.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,6 +13,7 @@ import { AuthService } from '../../../features/auth/services/auth.service';
 export class SidebarComponent {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
+  private readonly user = inject(UserStateService);
 
   navItems = [
     { label: 'Dashboard', icon: 'fa-gauge', route: '/admin/dashboard' },
@@ -27,6 +29,7 @@ export class SidebarComponent {
 
   signOut(): void {
     this.authService.logout();
+    this.user.clearUser();
     this.router.navigate(['/auth/login']);
   }
 }

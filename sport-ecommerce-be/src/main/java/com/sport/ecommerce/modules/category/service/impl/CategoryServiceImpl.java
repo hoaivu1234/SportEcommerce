@@ -39,6 +39,10 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.toResponseList(categoryRepository.findAllRootCategoriesWithChildren());
     }
 
+    public PageResponse<CategoryResponse> getCategoriesExcludeChildren(Pageable pageable) {
+        return PageResponse.of(categoryRepository.findAllCategoriesExcludeChildren(pageable));
+    }
+
     @Override
     @Transactional(readOnly = true)
     public CategoryResponse getCategoryById(Long id) {

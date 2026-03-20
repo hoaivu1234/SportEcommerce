@@ -27,13 +27,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         'Đã xảy ra lỗi. Vui lòng thử lại.';
 
       switch (error.status) {
-        case HTTP_STATUS.UNAUTHORIZED:
-          authService.logout();
-          router.navigate([AUTH_ROUTES.LOGIN], {
-            queryParams: { returnUrl: router.url },
-          });
-          break;
-
         case HTTP_STATUS.FORBIDDEN:
           toastService.error(serverMessage);
           router.navigate([AUTH_ROUTES.FORBIDDEN]);
