@@ -106,10 +106,32 @@ public class ProductServiceImpl implements ProductService {
         });
     }
 
+    public List<Long> getAllCategoryIds(Long categoryId) {
+        List<Long> result = new ArrayList<>();
+        collectCategoryIds(categoryId, result);
+        return result;
+    }
+
+    private void collectCategoryIds(Long parentId, List<Long> result) {
+        result.add(parentId);
+
+        List<Category> children = categoryRepository.findByParentId(parentId);
+        for (Category child : children) {
+            collectCategoryIds(child.getId(), result);
+        }
+    }
+
     private Specification<Product> buildSpecification(ProductFilterRequest filter) {
+
+        List<Long> categoryIds = null;
+
+        if (filter.getCategoryId() != null) {
+            categoryIds = getAllCategoryIds(filter.getCategoryId());
+        }
+
         return ProductSpecification.withFilters(
                 filter.getKeyword(),
-                filter.getCategoryId(),
+                categoryIds,
                 filter.getBrand(),
                 filter.getStatus(),
                 filter.getMinPrice(),

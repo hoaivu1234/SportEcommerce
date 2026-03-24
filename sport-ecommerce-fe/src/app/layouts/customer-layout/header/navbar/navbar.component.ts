@@ -22,9 +22,9 @@ export class NavbarComponent {
   readonly authService = inject(AuthService);
 
   navLinks = [
-    { label: 'Running', path: '/products/running' },
-    { label: 'Sports', path: '/products/sports' },
-    { label: 'Training', path: '/products/training' },
+    { label: 'Football', path: '/products/football' },
+    { label: 'Fitness', path: '/products/fitness' },
+    { label: 'Swimming', path: '/products/swimming' },
     { label: 'Sale', path: '/sale', highlight: true },
   ];
 

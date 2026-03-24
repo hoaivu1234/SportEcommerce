@@ -3,7 +3,9 @@
   <div class="page-header">
     <div>
       <h1 class="page-title">Taxonomy</h1>
-      <p class="page-subtitle">Organize and manage your product catalog hierarchy.</p>
+      <p class="page-subtitle">
+        Organize and manage your product catalog hierarchy.
+      </p>
     </div>
     <div class="header-actions">
       <button class="btn btn-primary" (click)="openModal()">
@@ -37,9 +39,19 @@
                 [class.expanded]="isExpanded(node.id)"
               ></i>
             } @else {
-              <i class="fas fa-minus tree-arrow" style="opacity:0;pointer-events:none"></i>
+              <i
+                class="fas fa-minus tree-arrow"
+                style="opacity: 0; pointer-events: none"
+              ></i>
             }
-            <i class="fas fa-folder tree-icon" [class.tree-icon--child]="depth > 0"></i>
+            @if (node.children.length > 0) {
+              <i
+                class="fas fa-folder tree-icon"
+                [class.tree-icon--child]="depth > 0"
+              ></i>
+            } @else {
+              <i class="fas fa-minus tree-icon"></i>
+            }
             <span class="tree-name">{{ node.name }}</span>
             <span class="tree-count">{{ node.totalProductCount }}</span>
           </div>
@@ -49,7 +61,10 @@
               @for (child of node.children; track child.id) {
                 <ng-container
                   [ngTemplateOutlet]="treeNode"
-                  [ngTemplateOutletContext]="{ $implicit: child, depth: depth + 1 }"
+                  [ngTemplateOutletContext]="{
+                    $implicit: child,
+                    depth: depth + 1,
+                  }"
                 ></ng-container>
               }
             </div>
@@ -66,7 +81,7 @@
         }
 
         @if (tree().length === 0) {
-          <p style="font-size:12px;color:var(--color-gray);padding:8px 0">
+          <p style="font-size: 12px; color: var(--color-gray); padding: 8px 0">
             No categories yet.
           </p>
         }
@@ -90,6 +105,10 @@
 
   <!-- Modal -->
   @if (showModal) {
-    <app-category-form [mode]="mode" (saved)="onSaved()" (close)="closeModal()"></app-category-form>
+    <app-category-form
+      [mode]="mode"
+      (saved)="onSaved()"
+      (close)="closeModal()"
+    ></app-category-form>
   }
 </div>

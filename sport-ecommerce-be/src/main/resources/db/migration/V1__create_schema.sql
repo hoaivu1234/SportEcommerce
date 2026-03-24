@@ -64,6 +64,7 @@ CREATE TABLE products (
     price DECIMAL(12,2),
     discount_price DECIMAL(12,2),
     category_id BIGINT,
+    is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
     status VARCHAR(20) DEFAULT 'ACTIVE',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -87,6 +88,7 @@ CREATE TABLE product_variants (
     color VARCHAR(50),
     price DECIMAL(12,2),
     stock INT,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
@@ -197,6 +199,8 @@ CREATE INDEX idx_product_price ON products(price);
 CREATE INDEX idx_order_user ON orders(user_id);
 
 CREATE INDEX idx_review_product ON reviews(product_id);
+
+CREATE INDEX idx_product_is_deleted ON products (is_deleted);
 
 CREATE INDEX idx_refresh_token ON refresh_tokens(token);
 
