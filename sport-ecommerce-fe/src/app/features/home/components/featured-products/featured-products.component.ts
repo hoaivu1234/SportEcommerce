@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProductCardComponent, ProductCard } from '../../../../shared/components/product-card/product-card.component';
 import { ProductService } from '../../../admin/products/services/product.service';
 
-type TabKey = 'all' | 'running' | 'training' | 'sports';
+type TabKey = 'all' | 'football' | 'fitness' | 'swimming';
 
 @Component({
   selector: 'app-featured-products',
@@ -19,9 +19,9 @@ export class FeaturedProductsComponent implements OnInit {
 
   tabs: { key: TabKey; label: string }[] = [
     { key: 'all', label: 'All' },
-    { key: 'running', label: 'Running' },
-    { key: 'training', label: 'Training' },
-    { key: 'sports', label: 'Team Sports' },
+    { key: 'football', label: 'Football' },
+    { key: 'fitness', label: 'Fitness' },
+    { key: 'swimming', label: 'Swimming' },
   ];
 
   allProducts: (ProductCard & { tags: TabKey[] })[] = [];
@@ -54,9 +54,9 @@ export class FeaturedProductsComponent implements OnInit {
     const tags: TabKey[] = ['all'];
     if (!categoryName) return tags;
     const lower = categoryName.toLowerCase();
-    if (lower.includes('run')) tags.push('running');
-    if (lower.includes('train') || lower.includes('gym') || lower.includes('fitness')) tags.push('training');
-    if (lower.includes('sport') || lower.includes('team') || lower.includes('basket') || lower.includes('football') || lower.includes('soccer')) tags.push('sports');
+    if (lower.includes('run')) tags.push('football');
+    if (lower.includes('train') || lower.includes('gym') || lower.includes('fitness')) tags.push('fitness');
+    if (lower.includes('sport') || lower.includes('team') || lower.includes('basket') || lower.includes('football') || lower.includes('soccer')) tags.push('swimming');
     return tags;
   }
 

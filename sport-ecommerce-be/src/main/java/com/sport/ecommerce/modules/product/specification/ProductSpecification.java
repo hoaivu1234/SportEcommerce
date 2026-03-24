@@ -34,6 +34,15 @@ public class ProductSpecification {
         };
     }
 
+    public static Specification<Product> hasCategoryIds(List<Long> categoryIds) {
+        return (root, query, cb) -> {
+            if (categoryIds == null || categoryIds.isEmpty()) {
+                return cb.conjunction();
+            }
+            return root.get("category").get("id").in(categoryIds);
+        };
+    }
+
     public static Specification<Product> hasBrand(String brand) {
         return (root, query, cb) -> {
             if (brand == null || brand.isBlank()) return cb.conjunction();
@@ -72,7 +81,7 @@ public class ProductSpecification {
      */
     public static Specification<Product> withFilters(
             String keyword,
-            Long categoryId,
+            List<Long> categoryIds,
             String brand,
             String status,
             BigDecimal minPrice,
@@ -81,7 +90,7 @@ public class ProductSpecification {
         return Specification
                 .where(notDeleted())
                 .and(hasKeyword(keyword))
-                .and(hasCategoryId(categoryId))
+                .and(hasCategoryIds(categoryIds))
                 .and(hasBrand(brand))
                 .and(hasStatus(status))
                 .and(hasPriceBetween(minPrice, maxPrice));
