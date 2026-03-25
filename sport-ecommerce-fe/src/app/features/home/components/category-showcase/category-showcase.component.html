@@ -1,45 +1,66 @@
-<section class="category-section">
+<section class="dept-section">
   <div class="container">
-    <div class="category-section__header">
+
+    <div class="dept-section__header">
       <div>
         <h2 class="section-title">Gear By Department</h2>
         <p class="section-subtitle">Find the right gear for every sport and activity</p>
       </div>
-      <a href="#" class="view-all-link">
-        View All Categories <i class="fas fa-arrow-right"></i>
+      <a routerLink="/products" class="view-all-link">
+        Shop All <i class="fas fa-arrow-right"></i>
       </a>
     </div>
 
-    <!-- Featured row (3 large) -->
-    <div class="category-grid category-grid--featured">
-      @for (cat of categories.slice(0, 3); track cat.name) {
-        <div class="category-card category-card--large" [style.background-image]="'url(' + cat.image + ')'">
-          <div class="category-card__overlay"></div>
-          <div class="category-card__content">
-            <span class="category-card__count">{{ cat.count }} Products</span>
-            <h3 class="category-card__name">{{ cat.name }}</h3>
-            <button class="category-card__btn">
-              Shop Now <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
-        </div>
-      }
-    </div>
+    <!-- Skeleton while loading -->
+    @if (isLoading()) {
+      <div class="dept-grid">
+        @for (i of [1, 2, 3]; track i) {
+          <div class="dept-card dept-card--skeleton"></div>
+        }
+      </div>
+    }
 
-    <!-- Secondary row (3 smaller) -->
-    <div class="category-grid category-grid--secondary">
-      @for (cat of categories.slice(3); track cat.name) {
-        <div class="category-card category-card--small" [style.background-image]="'url(' + cat.image + ')'">
-          <div class="category-card__overlay"></div>
-          <div class="category-card__content">
-            <span class="category-card__count">{{ cat.count }} Products</span>
-            <h3 class="category-card__name">{{ cat.name }}</h3>
-            <button class="category-card__btn">
-              Shop Now <i class="fas fa-arrow-right"></i>
-            </button>
+    <!-- Department columns (one per Level-1 category) -->
+    @if (!isLoading()) {
+      <div class="dept-grid">
+        @for (dept of departments(); track dept.id) {
+          <div class="dept-card">
+
+            <!-- Level-1 header -->
+            <h3 class="dept-card__title">
+              <i class="dept-card__icon fas" [ngClass]="getDeptIcon(dept.name)"></i>
+              {{ dept.name }}
+            </h3>
+
+            <!-- Level-2 sub-category links -->
+            <ul class="dept-card__links">
+              @for (sub of dept.subCategories; track sub.id) {
+                <li>
+                  <a
+                    class="dept-card__link"
+                    [routerLink]="['/products']"
+                    [queryParams]="{ categoryId: sub.id }"
+                  >
+                    {{ sub.name }}
+                    <i class="fas fa-chevron-right"></i>
+                  </a>
+                </li>
+              }
+            </ul>
+
+            <!-- Footer: browse all in this department -->
+            <a
+              class="dept-card__view-all"
+              [routerLink]="['/products']"
+              [queryParams]="{ categoryId: dept.id }"
+            >
+              All {{ dept.name }} <i class="fas fa-arrow-right"></i>
+            </a>
+
           </div>
-        </div>
-      }
-    </div>
+        }
+      </div>
+    }
+
   </div>
 </section>

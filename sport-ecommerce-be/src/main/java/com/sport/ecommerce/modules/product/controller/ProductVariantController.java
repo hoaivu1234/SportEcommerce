@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(AppConstant.API_PREFIX + "/products/{productId}/variants")
+@RequestMapping(AppConstant.ADMIN_PREFIX + "/products/{productId}/variants")
 @RequiredArgsConstructor
 public class ProductVariantController {
 

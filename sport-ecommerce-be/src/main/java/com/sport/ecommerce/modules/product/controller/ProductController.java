@@ -28,7 +28,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
-@RequestMapping(AppConstant.API_PREFIX + "/products")
+@RequestMapping(AppConstant.ADMIN_PREFIX + "/products")
 @RequiredArgsConstructor
 public class ProductController {
 

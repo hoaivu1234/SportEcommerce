@@ -43,8 +43,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers(
-                                        AppConstant.API_PREFIX + "/auth/**"
+                                        AppConstant.API_PREFIX + "/auth/**",
+                                        AppConstant.PUBLIC_PREFIX + "/**"
                                 ).permitAll()
+                                .requestMatchers(
+                                        AppConstant.ADMIN_PREFIX + "/**"
+                                ).hasAuthority("ROLE_ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(

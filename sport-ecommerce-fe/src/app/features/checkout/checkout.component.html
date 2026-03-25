@@ -10,13 +10,23 @@
     </div>
   </header>
 
+  @if (errorMessage()) {
+    <div class="checkout-error-banner">
+      <i class="fas fa-exclamation-circle"></i> {{ errorMessage() }}
+    </div>
+  }
+
   <div class="checkout-body">
     <div class="checkout-form-col">
-      <app-shipping-form />
+      <app-shipping-form (addressChange)="onAddressChange($event)" />
       <app-payment-form />
     </div>
     <div class="checkout-summary-col">
-      <app-order-summary />
+      <app-order-summary
+        [cart]="cartState.cart()"
+        [isSubmitting]="isSubmitting()"
+        (placeOrder)="onPlaceOrder()"
+      />
     </div>
   </div>
 </div>

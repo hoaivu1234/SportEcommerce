@@ -1,71 +1,128 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { ProductCardComponent, ProductCard } from '../../../../shared/components/product-card/product-card.component';
 import { ProductService } from '../../../admin/products/services/product.service';
+import { CategoryService, CategoryTreeNode } from '../../../admin/categories/services/category.service';
 
-type TabKey = 'all' | 'football' | 'fitness' | 'swimming';
+/** Extends ProductCard with a sport tag derived from the category hierarchy. */
+interface TrendingProduct extends ProductCard {
+  /** First word (lowercase) of the Level-2 category: "football" | "fitness" | "swimming" | "all" */
+  sport: string;
+}
 
 @Component({
   selector: 'app-featured-products',
   standalone: true,
-  imports: [CommonModule, ProductCardComponent],
+  imports: [CommonModule, RouterModule, ProductCardComponent],
   templateUrl: './featured-products.component.html',
   styleUrl: './featured-products.component.css',
 })
 export class FeaturedProductsComponent implements OnInit {
   private readonly productService = inject(ProductService);
+  private readonly categoryService = inject(CategoryService);
 
-  activeTab = signal<TabKey>('all');
+  activeTab = signal<string>('all');
 
-  tabs: { key: TabKey; label: string }[] = [
-    { key: 'all', label: 'All' },
-    { key: 'football', label: 'Football' },
-    { key: 'fitness', label: 'Fitness' },
-    { key: 'swimming', label: 'Swimming' },
-  ];
+  /** Populated after the API call completes — starts with "All" only. */
+  tabs: { key: string; label: string }[] = [{ key: 'all', label: 'All' }];
 
-  allProducts: (ProductCard & { tags: TabKey[] })[] = [];
+  private allProducts: TrendingProduct[] = [];
+  isLoading = true;
+
+  /** Re-evaluated by Angular's CD whenever activeTab() changes. */
+  get filteredProducts(): ProductCard[] {
+    const tab = this.activeTab();
+    return tab === 'all'
+      ? this.allProducts
+      : this.allProducts.filter(p => p.sport === tab);
+  }
 
   ngOnInit(): void {
-    this.productService.getProducts({
-      page: 0,
-      size: 8,
-      sort: 'createdAt',
-      direction: 'desc',
-      status: 'ACTIVE',
+    // Load tree and products in parallel — tree provides the sport→categoryId mapping
+    forkJoin({
+      tree: this.categoryService.getTreeCategories(),
+      products: this.productService.getProducts({
+        page: 0,
+        size: 8,
+        sort: 'createdAt',
+        direction: 'desc',
+        status: 'ACTIVE',
+      }),
     }).subscribe({
-      next: (res) => {
-        this.allProducts = res.data.content.map(p => ({
-          id: p.id,
-          name: p.name,
-          price: p.price,
-          originalPrice: p.discountPrice,
-          image: p.mainImageUrl || 'assets/images/placeholder.png',
-          category: p.categoryName || 'Sport',
-          rating: 0,
-          reviewCount: 0,
-          tags: this.resolveTags(p.categoryName),
-        }));
+      next: ({ tree, products }) => {
+        const tagMap = this.buildTagMap(tree.data);
+
+        // Derive tabs from unique sport names (Level-2 first word)
+        const sportNames = new Set<string>();
+        for (const root of tree.data) {
+          for (const domain of root.children ?? []) {
+            sportNames.add(domain.name.split(' ')[0].toLowerCase());
+          }
+        }
+        this.tabs = [
+          { key: 'all', label: 'All' },
+          ...[...sportNames].map(s => ({
+            key: s,
+            label: s.charAt(0).toUpperCase() + s.slice(1),
+          })),
+        ];
+
+        this.allProducts = products.data.content.map(p => {
+          // price    = the full/regular price (shown as crossed-out if a sale price exists)
+          // discountPrice = the LOWER sale price shown as the active price
+          const displayPrice  = p.discountPrice ?? p.price;
+          const originalPrice = p.discountPrice ? p.price : undefined;
+
+          return {
+            id: p.id,
+            name: p.name,
+            price: displayPrice,
+            originalPrice,
+            image: p.mainImageUrl ?? 'assets/images/placeholder.png',
+            category: p.categoryName ?? '',
+            rating: 0,
+            reviewCount: 0,
+            badge: p.discountPrice ? 'SALE' : undefined,
+            sport: tagMap.get(p.categoryId ?? 0) ?? 'all',
+          };
+        });
+
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
       },
     });
   }
 
-  private resolveTags(categoryName?: string): TabKey[] {
-    const tags: TabKey[] = ['all'];
-    if (!categoryName) return tags;
-    const lower = categoryName.toLowerCase();
-    if (lower.includes('run')) tags.push('football');
-    if (lower.includes('train') || lower.includes('gym') || lower.includes('fitness')) tags.push('fitness');
-    if (lower.includes('sport') || lower.includes('team') || lower.includes('basket') || lower.includes('football') || lower.includes('soccer')) tags.push('swimming');
-    return tags;
+  /**
+   * Builds a Map<leafCategoryId, sportName> by traversing the tree.
+   *
+   * Hierarchy:
+   *   Level-1 (root): Shoes, Clothing, Accessories
+   *   Level-2 (domain): Football Shoes, Fitness Clothing …  ← sport = first word (lowercase)
+   *   Level-3 (leaf): Firm Ground Boots, Gym T-shirt …      ← what products reference
+   *
+   * "Football Shoes" → sport = "football"
+   * "Fitness Clothing" → sport = "fitness"
+   * "Swimming Accessories" → sport = "swimming"
+   */
+  private buildTagMap(tree: CategoryTreeNode[]): Map<number, string> {
+    const map = new Map<number, string>();
+    for (const root of tree) {
+      for (const domain of root.children ?? []) {
+        const sport = domain.name.split(' ')[0].toLowerCase();
+        for (const leaf of domain.children ?? []) {
+          map.set(leaf.id, sport);
+        }
+      }
+    }
+    return map;
   }
 
-  get filteredProducts(): ProductCard[] {
-    const tab = this.activeTab();
-    return this.allProducts.filter((p) => p.tags.includes(tab));
-  }
-
-  setTab(tab: TabKey): void {
-    this.activeTab.set(tab);
+  setTab(key: string): void {
+    this.activeTab.set(key);
   }
 }

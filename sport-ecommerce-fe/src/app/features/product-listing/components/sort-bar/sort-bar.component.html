@@ -1,10 +1,16 @@
 <div class="sort-bar">
-  <span class="sort-bar__count">{{ totalProducts }} Products Found</span>
+  <span class="sort-bar__count">
+    <strong>{{ totalProducts }}</strong> Products Found
+  </span>
 
   <div class="sort-bar__right">
     <div class="sort-bar__sort">
       <label for="sort-select">Sort by:</label>
-      <select id="sort-select" [(ngModel)]="selectedSort" (ngModelChange)="onSortChange()">
+      <select
+        id="sort-select"
+        [ngModel]="sort"
+        (ngModelChange)="onSortChange($event)"
+      >
         @for (option of sortOptions; track option.value) {
           <option [value]="option.value">{{ option.label }}</option>
         }
@@ -17,6 +23,7 @@
         [class.view-btn--active]="viewMode === 'grid'"
         (click)="setViewMode('grid')"
         title="Grid View"
+        aria-label="Switch to grid view"
       >
         <i class="fas fa-th"></i>
       </button>
@@ -25,6 +32,7 @@
         [class.view-btn--active]="viewMode === 'list'"
         (click)="setViewMode('list')"
         title="List View"
+        aria-label="Switch to list view"
       >
         <i class="fas fa-list"></i>
       </button>

@@ -1,6 +1,29 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CategoryTreeNode } from '../../../admin/categories/services/category.service';
+import {
+  ProductFilterState,
+  MAX_PRICE_CAP,
+} from '../../models/product-filter.model';
+
+/**
+ * Flat category option used for rendering the sidebar filter list.
+ * Groups Level-2 categories under their Level-1 parent name.
+ */
+interface CategoryGroup {
+  parentName: string;
+  items: { id: number; name: string }[];
+}
+
+const BRANDS = ['ActiveGear', 'EliteFlex', 'SureTech', 'BuiltFit', 'Ironstrength'];
 
 @Component({
   selector: 'app-filter-sidebar',
@@ -9,63 +32,102 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './filter-sidebar.component.html',
   styleUrl: './filter-sidebar.component.css',
 })
-export class FilterSidebarComponent {
-  @Output() filtersChanged = new EventEmitter<any>();
+export class FilterSidebarComponent implements OnChanges {
+  /**
+   * Current filter state — drives which checkboxes / inputs are selected.
+   * Passed down from the parent so the URL is the source of truth.
+   */
+  @Input() filterState!: ProductFilterState;
 
-  sportTypes = [
-    { label: 'Running', checked: false },
-    { label: 'Training', checked: false },
-    { label: 'Basketball', checked: false },
-    { label: 'Football', checked: false },
-    { label: 'Tennis', checked: false },
-  ];
+  /** Full category tree for building dynamic category groups. */
+  @Input() categoryTree: CategoryTreeNode[] = [];
 
-  brands = [
-    { label: 'ActiveGear', checked: false },
-    { label: 'EliteFlex', checked: false },
-    { label: 'SureTech', checked: false },
-    { label: 'BuiltFit', checked: false },
-    { label: 'Ironstrength', checked: false },
-  ];
+  /** Emits a partial state patch whenever the user changes any filter. */
+  @Output() filterChange = new EventEmitter<Partial<ProductFilterState>>();
 
-  sizes = ['7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11', '11.5', '12'];
-  selectedSizes: string[] = [];
+  /** Keyword input changes are debounced by the parent — emitted immediately. */
+  @Output() keywordChange = new EventEmitter<string>();
 
-  colors = [
-    { name: 'Black', value: '#1a1a1a', selected: false },
-    { name: 'White', value: '#ffffff', selected: false },
-    { name: 'Red', value: '#e8521a', selected: false },
-    { name: 'Blue', value: '#1a6ae8', selected: false },
-    { name: 'Green', value: '#1ae852', selected: false },
-    { name: 'Yellow', value: '#f5e642', selected: false },
-  ];
+  // ── Local view state (mirrors filterState to keep inputs two-way bound) ──
 
-  priceMin = 0;
-  priceMax = 399;
+  localKeyword    = '';
+  localCategoryId: number | null = null;
+  localBrand:      string | null = null;
+  /** Slider values — committed to URL only on mouseup (avoids API flood). */
+  localMinPrice = 0;
+  localMaxPrice = MAX_PRICE_CAP;
 
-  toggleSize(size: string) {
-    const idx = this.selectedSizes.indexOf(size);
-    if (idx > -1) {
-      this.selectedSizes.splice(idx, 1);
-    } else {
-      this.selectedSizes.push(size);
+  readonly brands      = BRANDS;
+  readonly maxPriceCap = MAX_PRICE_CAP;
+
+  // ── Derived: build category groups from tree ──────────────────────────────
+
+  get categoryGroups(): CategoryGroup[] {
+    return this.categoryTree.map(root => ({
+      parentName: root.name,
+      // Level-2 items are the direct children
+      items: (root.children ?? []).map(child => ({
+        id:   child.id,
+        name: child.name,
+      })),
+    }));
+  }
+
+  // ── Lifecycle ─────────────────────────────────────────────────────────────
+
+  /**
+   * Sync local state from the incoming filterState.
+   * This keeps the UI in sync when the user navigates back/forward
+   * or shares a URL — the filter state flows DOWN from the URL.
+   */
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['filterState']) {
+      const s = this.filterState;
+      this.localKeyword    = s.keyword;
+      this.localCategoryId = s.categoryId;
+      this.localBrand      = s.brand;
+      this.localMinPrice   = s.minPrice ?? 0;
+      this.localMaxPrice   = s.maxPrice ?? this.maxPriceCap;
     }
   }
 
-  isSizeSelected(size: string): boolean {
-    return this.selectedSizes.includes(size);
+  // ── Event emitters ────────────────────────────────────────────────────────
+
+  onKeywordInput(value: string): void {
+    this.keywordChange.emit(value);
   }
 
-  toggleColor(color: any) {
-    color.selected = !color.selected;
+  onCategoryToggle(id: number): void {
+    const next = this.localCategoryId === id ? null : id;
+    this.localCategoryId = next;
+    this.filterChange.emit({ categoryId: next });
   }
 
-  clearFilters() {
-    this.sportTypes.forEach(s => s.checked = false);
-    this.brands.forEach(b => b.checked = false);
-    this.colors.forEach(c => c.selected = false);
-    this.selectedSizes = [];
-    this.priceMin = 0;
-    this.priceMax = 399;
+  onBrandToggle(brand: string): void {
+    const next = this.localBrand === brand ? null : brand;
+    this.localBrand = next;
+    this.filterChange.emit({ brand: next });
+  }
+
+  /**
+   * Commit price range to URL only when the user releases the slider.
+   * Using (change) instead of (input) prevents an API call on every pixel.
+   */
+  onPriceCommit(): void {
+    this.filterChange.emit({
+      minPrice: this.localMinPrice > 0               ? this.localMinPrice : null,
+      maxPrice: this.localMaxPrice < this.maxPriceCap ? this.localMaxPrice : null,
+    });
+  }
+
+  clearAll(): void {
+    this.filterChange.emit({
+      keyword:    '',
+      categoryId: null,
+      brand:      null,
+      minPrice:   null,
+      maxPrice:   null,
+    });
+    this.keywordChange.emit('');
   }
 }

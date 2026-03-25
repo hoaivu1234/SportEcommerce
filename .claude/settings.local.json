@@ -9,7 +9,9 @@
       "Bash(\"D:/Ca_nhan/SportEcommerce/sport-ecommerce-fe/src/app/features/product-listing/product-listing.component.css\")",
       "Bash(\"D:/Ca_nhan/SportEcommerce/sport-ecommerce-fe/src/app/features/product-detail/product-detail.component.css\")",
       "Bash(npx tsc:*)",
-      "Bash(./mvnw compile:*)"
+      "Bash(./mvnw compile:*)",
+      "Bash(find D:Ca_nhanSportEcommercesport-ecommerce-fesrcappshared -name *pagination* -o -name *product-card*)",
+      "Bash(xargs ls:*)"
     ]
   }
 }

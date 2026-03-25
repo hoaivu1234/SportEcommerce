@@ -1,76 +1,103 @@
 <aside class="filter-sidebar">
+
   <div class="filter-header">
     <h3 class="filter-title">FILTERS</h3>
-    <button class="clear-btn" (click)="clearFilters()">Clear All</button>
+    <button class="clear-btn" (click)="clearAll()">Clear All</button>
   </div>
 
-  <!-- Sport Type -->
-  <div class="filter-section">
-    <h4 class="filter-section__title">Sport Type</h4>
-    @for (sport of sportTypes; track sport.label) {
-      <label class="checkbox-label">
-        <input type="checkbox" [(ngModel)]="sport.checked" />
-        <span class="checkmark"></span>
-        {{ sport.label }}
-      </label>
-    }
+  <!-- Keyword Search -->
+  <div class="filter-section filter-section--search">
+    <div class="search-input-wrap">
+      <i class="fas fa-search search-icon"></i>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search products…"
+        [ngModel]="localKeyword"
+        (ngModelChange)="localKeyword = $event; onKeywordInput($event)"
+        aria-label="Search products"
+      />
+      @if (localKeyword) {
+        <button class="search-clear" (click)="localKeyword = ''; onKeywordInput('')" aria-label="Clear search">
+          <i class="fas fa-times"></i>
+        </button>
+      }
+    </div>
   </div>
+
+  <!-- Category -->
+  @if (categoryGroups.length > 0) {
+    <div class="filter-section">
+      <h4 class="filter-section__title">Category</h4>
+      @for (group of categoryGroups; track group.parentName) {
+        <p class="filter-group-label">{{ group.parentName }}</p>
+        @for (item of group.items; track item.id) {
+          <label class="checkbox-label" [class.checkbox-label--active]="localCategoryId === item.id">
+            <input
+              type="radio"
+              name="category"
+              [checked]="localCategoryId === item.id"
+              (change)="onCategoryToggle(item.id)"
+            />
+            <span class="checkmark"></span>
+            {{ item.name }}
+          </label>
+        }
+      }
+    </div>
+  }
 
   <!-- Price Range -->
   <div class="filter-section">
     <h4 class="filter-section__title">Price Range</h4>
     <div class="price-display">
-      <span>${{ priceMin }}</span>
-      <span>${{ priceMax }}</span>
+      <span>${{ localMinPrice }}</span>
+      <span>
+        @if (localMaxPrice >= maxPriceCap) { Any } @else { ${{ localMaxPrice }} }
+      </span>
     </div>
-    <input
-      type="range"
-      class="price-slider"
-      min="0"
-      max="399"
-      [(ngModel)]="priceMax"
-    />
-  </div>
-
-  <!-- Size -->
-  <div class="filter-section">
-    <h4 class="filter-section__title">Size</h4>
-    <div class="size-grid">
-      @for (size of sizes; track size) {
-        <button
-          class="size-btn"
-          [class.size-btn--active]="isSizeSelected(size)"
-          (click)="toggleSize(size)"
-        >{{ size }}</button>
-      }
+    <div class="price-sliders">
+      <input
+        type="range"
+        class="price-slider"
+        [min]="0"
+        [max]="maxPriceCap"
+        [(ngModel)]="localMinPrice"
+        (change)="onPriceCommit()"
+        aria-label="Minimum price"
+      />
+      <input
+        type="range"
+        class="price-slider"
+        [min]="0"
+        [max]="maxPriceCap"
+        [(ngModel)]="localMaxPrice"
+        (change)="onPriceCommit()"
+        aria-label="Maximum price"
+      />
     </div>
-  </div>
-
-  <!-- Color -->
-  <div class="filter-section">
-    <h4 class="filter-section__title">Color</h4>
-    <div class="color-swatches">
-      @for (color of colors; track color.name) {
-        <button
-          class="color-swatch"
-          [class.color-swatch--selected]="color.selected"
-          [style.background-color]="color.value"
-          [title]="color.name"
-          (click)="toggleColor(color)"
-        ></button>
-      }
+    <div class="price-presets">
+      <button class="price-preset" (click)="localMinPrice=0; localMaxPrice=50; onPriceCommit()">Under $50</button>
+      <button class="price-preset" (click)="localMinPrice=50; localMaxPrice=150; onPriceCommit()">$50–$150</button>
+      <button class="price-preset" (click)="localMinPrice=150; localMaxPrice=maxPriceCap; onPriceCommit()">$150+</button>
     </div>
   </div>
 
   <!-- Brand -->
   <div class="filter-section">
     <h4 class="filter-section__title">Brand</h4>
-    @for (brand of brands; track brand.label) {
-      <label class="checkbox-label">
-        <input type="checkbox" [(ngModel)]="brand.checked" />
+    @for (brand of brands; track brand) {
+      <label class="checkbox-label" [class.checkbox-label--active]="localBrand === brand">
+        <input
+          type="radio"
+          name="brand"
+          [checked]="localBrand === brand"
+          (change)="onBrandToggle(brand)"
+        />
         <span class="checkmark"></span>
-        {{ brand.label }}
+        {{ brand }}
       </label>
     }
   </div>
+
 </aside>

@@ -9,6 +9,7 @@
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="modal-body">
+
         <div class="form-group">
           <label>Name <span class="required">*</span></label>
           <input
@@ -16,18 +17,34 @@
             class="form-input"
             placeholder="e.g. Trail Running"
             formControlName="name"
+            [class.is-invalid]="form.get('name')?.invalid && form.get('name')?.touched"
           />
+          <div class="field-error" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+            Category name is required.
+          </div>
         </div>
 
+        <!--
+          Only level-2 (domain) categories are shown — the backend enforces that
+          new categories must be leaves (level-3), so the parent must be level-2.
+        -->
         <div class="form-group">
-          <label>Parent Category</label>
-          <select class="form-select" formControlName="parentId">
-            <option [ngValue]="null">None (Top-level)</option>
-            <option *ngFor="let c of filteredCategories()" [ngValue]="c.id">
+          <label>Parent Category <span class="required">*</span></label>
+          <select
+            class="form-select"
+            formControlName="parentId"
+            [class.is-invalid]="form.get('parentId')?.invalid && form.get('parentId')?.touched"
+          >
+            <option [ngValue]="null" disabled>— Select a domain category —</option>
+            <option *ngFor="let c of parentOptions()" [ngValue]="c.id">
               {{ c.name }}
             </option>
           </select>
+          <div class="field-error" *ngIf="form.get('parentId')?.invalid && form.get('parentId')?.touched">
+            A parent category is required.
+          </div>
         </div>
+
       </div>
 
       <div class="modal-footer">

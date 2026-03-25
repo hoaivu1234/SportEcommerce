@@ -1,16 +1,17 @@
 <section class="trending-section">
   <div class="container">
+
     <div class="trending-section__header">
       <div>
         <h2 class="section-title">Trending Now</h2>
         <p class="section-subtitle">Bestsellers loved by athletes everywhere</p>
       </div>
-      <a href="/products" class="view-all-link">
+      <a routerLink="/products" class="view-all-link">
         View All Products <i class="fas fa-arrow-right"></i>
       </a>
     </div>
 
-    <!-- Tabs -->
+    <!-- Sport tabs — populated from Level-1 category tree after load -->
     <div class="trending-tabs">
       @for (tab of tabs; track tab.key) {
         <button
@@ -21,11 +22,27 @@
       }
     </div>
 
-    <!-- Product Grid -->
-    <div class="trending-grid">
-      @for (product of filteredProducts; track product.id) {
-        <app-product-card [product]="product" />
+    <!-- Skeleton grid while loading -->
+    @if (isLoading) {
+      <div class="trending-grid">
+        @for (i of [1, 2, 3, 4]; track i) {
+          <div class="product-card--skeleton"></div>
+        }
+      </div>
+    }
+
+    <!-- Product grid -->
+    @if (!isLoading) {
+      <div class="trending-grid">
+        @for (product of filteredProducts; track product.id) {
+          <app-product-card [product]="product" />
+        }
+      </div>
+
+      @if (filteredProducts.length === 0) {
+        <p class="trending-empty">No products available in this category yet.</p>
       }
-    </div>
+    }
+
   </div>
 </section>

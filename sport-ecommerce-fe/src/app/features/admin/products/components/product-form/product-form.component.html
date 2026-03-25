@@ -69,13 +69,23 @@
             />
           </div>
           <div class="form-group">
-            <label>Category</label>
-            <select class="form-select" formControlName="categoryId">
-              <option [ngValue]="null">— No category —</option>
+            <label>
+              Category
+              <span class="required-star">*</span>
+            </label>
+            <select
+              class="form-select"
+              formControlName="categoryId"
+              [class.is-invalid]="hasError('categoryId', 'required')"
+            >
+              <option [ngValue]="null" disabled>— Select a leaf category —</option>
               <option *ngFor="let cat of categories" [ngValue]="cat.id">
-                {{ cat.parentName ? '↳ ' + cat.name : cat.name }}
+                {{ cat.parentName ? cat.parentName + ' › ' + cat.name : cat.name }}
               </option>
             </select>
+            <div class="field-error" *ngIf="hasError('categoryId', 'required')">
+              Category is required.
+            </div>
           </div>
         </div>
 

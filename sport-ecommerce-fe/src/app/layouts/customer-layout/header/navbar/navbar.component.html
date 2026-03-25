@@ -52,12 +52,12 @@
         }
       </div>
 
-      <button class="navbar__action-btn navbar__cart-btn" title="Cart">
+      <a routerLink="/cart" class="navbar__action-btn navbar__cart-btn" title="Cart">
         <i class="fas fa-shopping-bag"></i>
-        @if (cartCount() > 0) {
-          <span class="cart-badge">{{ cartCount() }}</span>
+        @if (cartCount > 0) {
+          <span class="cart-badge">{{ cartCount }}</span>
         }
-      </button>
+      </a>
     </div>
 
     <!-- Mobile Menu Toggle -->

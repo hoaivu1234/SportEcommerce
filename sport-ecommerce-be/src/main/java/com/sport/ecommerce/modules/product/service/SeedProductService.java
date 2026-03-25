@@ -11,6 +11,7 @@ import com.sport.ecommerce.modules.product.dto.request.ProductVariantRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -27,71 +28,15 @@ public class SeedProductService {
 
     private static final String CLOUDINARY_FOLDER = "sport-shop/products";
 
-    Map<SportCategory, List<String>> BRANDS = Map.of(
-
-            SportCategory.FOOTBALL, List.of(
-                    "Nike", "Adidas", "Puma", "Mizuno"
-            ),
-
-            SportCategory.FITNESS, List.of(
-                    "Nike", "Adidas", "Under Armour", "Reebok"
-            ),
-
-            SportCategory.SWIMMING, List.of(
-                    "Speedo", "Arena", "TYR"
-            )
+    private static final Map<SportCategory, List<String>> BRANDS = Map.of(
+            SportCategory.FOOTBALL, List.of("Nike", "Adidas", "Puma", "Mizuno"),
+            SportCategory.FITNESS,  List.of("Nike", "Adidas", "Under Armour", "Reebok"),
+            SportCategory.SWIMMING, List.of("Speedo", "Arena", "TYR")
     );
 
-    Map<String, List<Long>> CATEGORY_MAP = Map.of(
-            "SHOES_FOOTBALL", List.of(1L, 2L),
-            "CLOTHING_FOOTBALL", List.of(3L, 4L),
-            "ACCESSORIES_FOOTBALL", List.of(5L),
-            "SHOES_FITNESS", List.of(6L),
-            "CLOTHING_FITNESS", List.of(7L),
-            "ACCESSORIES_FITNESS", List.of(8L),
-            "SHOES_SWIMMING", List.of(9L),
-            "CLOTHING_SWIMMING", List.of(10L),
-            "ACCESSORIES_SWIMMING", List.of(11L));
-
-    Map<String, List<String>> PRODUCT_TYPES = Map.of(
-
-            // SHOES
-            "SHOES_FOOTBALL", List.of(
-                    "Football Cleats", "Football Turf Shoes"
-            ),
-            "SHOES_FITNESS", List.of(
-                    "Training Shoes", "Running Shoes", "Gym Shoes"
-            ),
-            "SHOES_SWIMMING", List.of(
-                    "Water Shoes", "Pool Slides"
-            ),
-
-            // CLOTHING
-            "CLOTHING_FOOTBALL", List.of(
-                    "Football Jersey", "Football Shorts", "Football Socks"
-            ),
-            "CLOTHING_FITNESS", List.of(
-                    "Gym T-shirt", "Training Shorts", "Compression Wear", "Tank Top"
-            ),
-            "CLOTHING_SWIMMING", List.of(
-                    "Swimsuit", "Swimming Trunks", "Rash Guard"
-            ),
-
-            // ACCESSORIES
-            "ACCESSORIES_FOOTBALL", List.of(
-                    "Shin Guards", "Football Gloves"
-            ),
-            "ACCESSORIES_FITNESS", List.of(
-                    "Gym Gloves", "Water Bottle", "Fitness Band"
-            ),
-            "ACCESSORIES_SWIMMING", List.of(
-                    "Swimming Goggles", "Swim Cap", "Kickboard"
-            )
-    );
-
-    private static final String[] SIZES = {"XS", "S", "M", "L", "XL", "XXL"};
+    private static final String[] SIZES      = {"XS", "S", "M", "L", "XL", "XXL"};
     private static final String[] SHOE_SIZES = {"6", "7", "8", "9", "10", "11", "12"};
-    private static final String[] COLORS = {
+    private static final String[] COLORS     = {
             "Black", "White", "Red", "Blue", "Navy", "Gray", "Green",
             "Orange", "Yellow", "Pink", "Purple", "Maroon"
     };
@@ -108,13 +53,12 @@ public class SeedProductService {
      * @return list of error messages for any products that failed; empty if all succeeded
      */
     public SeedResult seed(int count) {
-        List<Long> categoryIds = fetchCategoryIds();
         List<String> errors = new ArrayList<>();
         int created = 0;
 
         for (int i = 0; i < count; i++) {
             try {
-                ProductRequest request = buildRandomProduct(categoryIds);
+                ProductRequest request = buildRandomProduct();
                 productService.createProduct(request);
                 created++;
                 log.debug("Seeded product {}/{}: {}", i + 1, count, request.getName());
@@ -128,55 +72,112 @@ public class SeedProductService {
         return new SeedResult(created, errors);
     }
 
-    // ── Builders ─────────────────────────────────────────────────────────────
+    // ── Product builder ───────────────────────────────────────────────────────
 
-    private ProductRequest buildRandomProduct(List<Long> categoryIds) {
-        MainCategory mainCategory = randomFrom(MainCategory.values());
+    private ProductRequest buildRandomProduct() {
+        MainCategory mainCategory  = randomFrom(MainCategory.values());
         SportCategory sportCategory = randomFrom(SportCategory.values());
 
-        String key = mainCategory.name() + "_" + sportCategory.name();
-        String brand = random(BRANDS.get(sportCategory));
-        String type = random(PRODUCT_TYPES.get(key));
-        String name = brand + " " + type + " " + randomSuffix();
+        Category leafCategory = selectRandomLeafCategory(
+                findLeafCategories(mainCategory, sportCategory)
+        );
 
-        BigDecimal basePrice = randomPrice(29, 199);
+        String brand = random(BRANDS.get(sportCategory));
+        // Name is derived directly from the leaf category so product ↔ category always match
+        String name = brand + " " + leafCategory.getName() + " " + randomSuffix();
+
+        BigDecimal basePrice     = randomPrice(29, 199);
         BigDecimal discountPrice = randomDiscountPrice(basePrice);
 
         ProductRequest req = new ProductRequest();
         req.setName(name);
-        req.setDescription("Premium " + type.toLowerCase() + " by " + brand + ". Designed for performance and comfort.");
+        req.setDescription("Premium " + leafCategory.getName().toLowerCase() + " by " + brand
+                + ". Designed for performance and comfort.");
         req.setBrand(brand);
         req.setPrice(basePrice);
         req.setDiscountPrice(discountPrice);
         req.setStatus("ACTIVE");
-
-        List<Long> validCategoryIds = CATEGORY_MAP.get(key);
-
-        if (validCategoryIds != null && !validCategoryIds.isEmpty()) {
-            req.setCategoryId(
-                    validCategoryIds.get(random.nextInt(validCategoryIds.size()))
-            );
-        }
-
+        req.setCategoryId(leafCategory.getId());
         req.setImages(buildImages());
-        req.setVariants(buildVariants(type, basePrice));
+        req.setVariants(buildVariants(mainCategory, basePrice));
 
         return req;
     }
 
+    // ── Category resolution ───────────────────────────────────────────────────
+
+    /**
+     * Resolves all level-3 (leaf) categories whose parent name is
+     * "{SportCategory} {MainCategory}" — e.g. "Football Shoes".
+     *
+     * <p>Hierarchy: Root (level 1) → Sport-Domain (level 2) → Leaf (level 3)
+     *
+     * @throws IllegalStateException if the level-2 category or its children are not found
+     */
+    @Transactional(readOnly = true)
+    List<Category> findLeafCategories(MainCategory mainCategory, SportCategory sportCategory) {
+        String level2Name = toTitleCase(sportCategory.name()) + " " + toTitleCase(mainCategory.name());
+
+        Category level2 = categoryRepository.findByName(level2Name)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Level-2 category not found: \"" + level2Name + "\". "
+                        + "Ensure the database is seeded with the correct category hierarchy."));
+
+        List<Category> leaves = categoryRepository.findByParentId(level2.getId());
+        if (leaves.isEmpty()) {
+            throw new IllegalStateException(
+                    "No leaf categories found under \"" + level2Name + "\". "
+                    + "Ensure level-3 categories exist in the database.");
+        }
+
+        String rootName = "(root)";
+        try {
+            if (level2.getParent() != null) {
+                rootName = level2.getParent().getName();
+            }
+        } catch (Exception ignored) {
+            // lazy proxy unavailable — log is best-effort
+        }
+
+        log.debug("Category path resolved: {} → {} → [{}]",
+                rootName,
+                level2Name,
+                leaves.stream().map(Category::getName).reduce((a, b) -> a + ", " + b).orElse(""));
+
+        return leaves;
+    }
+
+    /**
+     * Picks a random leaf category from the provided list.
+     *
+     * @throws IllegalArgumentException if the list is null or empty
+     */
+    Category selectRandomLeafCategory(List<Category> leaves) {
+        if (leaves == null || leaves.isEmpty()) {
+            throw new IllegalArgumentException("Cannot select from an empty leaf category list.");
+        }
+        Category selected = leaves.get(random.nextInt(leaves.size()));
+        log.info("Selected leaf category: \"{}\" (id={})", selected.getName(), selected.getId());
+        return selected;
+    }
+
+    /** "FOOTBALL" → "Football", "ACCESSORIES" → "Accessories" */
+    private String toTitleCase(String enumName) {
+        return enumName.substring(0, 1).toUpperCase() + enumName.substring(1).toLowerCase();
+    }
+
+    // ── Supporting builders ───────────────────────────────────────────────────
+
     private BigDecimal randomDiscountPrice(BigDecimal basePrice) {
         int discountPercent = 5 + random.nextInt(26);
-
         BigDecimal discount = basePrice
                 .multiply(BigDecimal.valueOf(discountPercent))
                 .divide(BigDecimal.valueOf(100));
-
-        return basePrice.subtract(discount)
-                .max(BigDecimal.ZERO);
+        return basePrice.subtract(discount).max(BigDecimal.ZERO);
     }
 
     private List<ProductImageRequest> buildImages() {
-        String seed = UUID.randomUUID().toString().substring(0, 8);
+        String seed     = UUID.randomUUID().toString().substring(0, 8);
         String imageUrl = uploadToCloudinary(String.format(IMAGE_URL_TEMPLATE, seed));
 
         ProductImageRequest img = new ProductImageRequest();
@@ -191,26 +192,24 @@ public class SeedProductService {
             return cloudinaryService.uploadFromUrl(sourceUrl, CLOUDINARY_FOLDER);
         } catch (Exception ex) {
             log.warn("Cloudinary upload failed ({}), using source URL as fallback: {}", ex.getMessage(), sourceUrl);
-            // Fall back to the original URL so product creation doesn't fail entirely
             return sourceUrl;
         }
     }
 
-    private List<ProductVariantRequest> buildVariants(String type, BigDecimal basePrice) {
-        boolean isShoe = type.toLowerCase().contains("shoe") || type.toLowerCase().contains("boot")
-                || type.toLowerCase().contains("cleat");
-        String[] sizePool = isShoe ? SHOE_SIZES : SIZES;
+    private List<ProductVariantRequest> buildVariants(MainCategory mainCategory, BigDecimal basePrice) {
+        // Use shoe sizes for SHOES, clothing/general sizes for everything else
+        String[] sizePool = (mainCategory == MainCategory.SHOES) ? SHOE_SIZES : SIZES;
 
         List<ProductVariantRequest> variants = new ArrayList<>();
         String color = randomFrom(COLORS);
 
-        // Pick 2–4 random sizes
         int numSizes = 2 + random.nextInt(3);
         for (int i = 0; i < numSizes; i++) {
             String size = sizePool[random.nextInt(sizePool.length)];
-            String sku = "SKU-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+            String sku  = "SKU-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
 
-            BigDecimal variantPrice = basePrice.add(BigDecimal.valueOf(random.nextInt(21) - 10))
+            BigDecimal variantPrice = basePrice
+                    .add(BigDecimal.valueOf(random.nextInt(21) - 10))
                     .max(BigDecimal.ONE);
 
             ProductVariantRequest v = new ProductVariantRequest();
@@ -225,18 +224,7 @@ public class SeedProductService {
         return variants;
     }
 
-    // ── Utilities ────────────────────────────────────────────────────────────
-
-    private List<Long> fetchCategoryIds() {
-        try {
-            return categoryRepository.findAll().stream()
-                    .map(Category::getId)
-                    .toList();
-        } catch (Exception ex) {
-            log.warn("Could not fetch categories, products will have no category: {}", ex.getMessage());
-            return List.of();
-        }
-    }
+    // ── Utilities ─────────────────────────────────────────────────────────────
 
     private String randomFrom(String[] arr) {
         return arr[random.nextInt(arr.length)];
@@ -259,7 +247,7 @@ public class SeedProductService {
         return String.valueOf(2000 + random.nextInt(25));
     }
 
-    // ── Result record ────────────────────────────────────────────────────────
+    // ── Result record ─────────────────────────────────────────────────────────
 
     public record SeedResult(int created, List<String> errors) {
         public int failed() { return errors.size(); }

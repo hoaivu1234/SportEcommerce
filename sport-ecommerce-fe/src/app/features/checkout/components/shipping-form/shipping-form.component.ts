@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ShippingAddressRequest } from '../../../../models/order.model';
 
 @Component({
   selector: 'app-shipping-form',
@@ -9,38 +10,34 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
   templateUrl: './shipping-form.component.html',
   styleUrl: './shipping-form.component.css',
 })
-export class ShippingFormComponent {
-  @Output() formValid = new EventEmitter<boolean>();
+export class ShippingFormComponent implements OnInit {
+  /** Emits the validated address whenever the form changes. Null when invalid. */
+  @Output() addressChange = new EventEmitter<ShippingAddressRequest | null>();
 
-  form: FormGroup;
+  form!: FormGroup;
 
-  deliveryOptions = [
-    { id: 'standard', label: 'Standard', desc: '2–3 Business Days', price: 0, selected: true },
-    { id: 'express', label: 'Express', desc: '1–2 Business Days', price: 15, selected: false },
-    { id: 'nextday', label: 'Next Day', desc: 'Delivered Tomorrow', price: 25, selected: false },
-  ];
+  constructor(private fb: FormBuilder) {}
 
-  selectedDelivery = 'standard';
-
-  constructor(private fb: FormBuilder) {
+  ngOnInit(): void {
     this.form = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      street: ['', Validators.required],
-      apt: [''],
-      city: ['', Validators.required],
-      state: ['', Validators.required],
-      zip: ['', [Validators.required, Validators.pattern(/^\d{5}(-\d{4})?$/)]],
-      saveAddress: [false],
+      fullName:    ['', [Validators.required, Validators.maxLength(200)]],
+      phone:       ['', [Validators.required, Validators.pattern(/^[0-9+\-\s]{7,20}$/)]],
+      addressLine: ['', [Validators.required, Validators.maxLength(255)]],
+      ward:        ['', [Validators.required, Validators.maxLength(100)]],
+      district:    ['', [Validators.required, Validators.maxLength(100)]],
+      province:    ['', [Validators.required, Validators.maxLength(100)]],
+    });
+
+    this.form.valueChanges.subscribe(() => {
+      this.addressChange.emit(this.form.valid ? this.form.value : null);
     });
   }
 
-  selectDelivery(id: string) {
-    this.selectedDelivery = id;
+  /** Mark all controls touched so validation messages show on submit attempt. */
+  markAllTouched(): void {
+    this.form.markAllAsTouched();
+    this.addressChange.emit(this.form.valid ? this.form.value : null);
   }
 
-  get deliveryPrice(): number {
-    const opt = this.deliveryOptions.find(o => o.id === this.selectedDelivery);
-    return opt ? opt.price : 0;
-  }
+  get f() { return this.form.controls; }
 }

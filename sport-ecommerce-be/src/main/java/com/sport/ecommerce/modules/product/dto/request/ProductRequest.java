@@ -29,6 +29,7 @@ public class ProductRequest {
 
     private BigDecimal discountPrice;
 
+    @NotNull(message = "Category is required")
     private Long categoryId;
 
     private String status = "ACTIVE";

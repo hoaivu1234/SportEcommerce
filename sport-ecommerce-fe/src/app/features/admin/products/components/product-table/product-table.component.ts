@@ -92,7 +92,7 @@ export class ProductTableComponent implements OnInit {
 
   loadProducts(): void {
     this.isLoading.set(true);
-    this.productService.getProducts({
+    this.productService.getAdminProducts({
       page: this.page(),
       size: this.pageSize(),
       sort: 'createdAt',

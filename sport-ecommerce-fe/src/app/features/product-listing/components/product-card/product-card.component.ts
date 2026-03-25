@@ -5,7 +5,10 @@ import { RouterLink } from '@angular/router';
 export interface ListingProduct {
   id: number;
   name: string;
+  /** Active display price — already the discounted price when on sale. */
   price: number;
+  /** Original (pre-discount) price — rendered with strikethrough when present. */
+  originalPrice?: number;
   badge?: 'Sale' | 'New';
   mainImageUrl?: string;
   totalStock?: number;
@@ -25,6 +28,10 @@ export class ListingProductCardComponent {
 
   get imageUrl(): string {
     return this.product.mainImageUrl || this.fallbackImage;
+  }
+
+  get isOutOfStock(): boolean {
+    return this.product.totalStock === 0;
   }
 
   onImageError(event: Event): void {

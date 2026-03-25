@@ -1,0 +1,71 @@
+<div class="confirmation-page">
+  @if (isLoading()) {
+    <div class="confirmation-loading">
+      <div class="spinner spinner--lg"></div>
+      <p>Loading your order...</p>
+    </div>
+  } @else if (error()) {
+    <div class="confirmation-error">
+      <i class="fas fa-exclamation-triangle"></i>
+      <p>{{ error() }}</p>
+      <a routerLink="/" class="btn btn--primary">Back to Home</a>
+    </div>
+  } @else if (order()) {
+    <div class="confirmation-card">
+      <div class="confirmation-card__icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h1 class="confirmation-card__title">Order Confirmed!</h1>
+      <p class="confirmation-card__sub">Thank you for your purchase.</p>
+
+      <div class="confirmation-card__number">
+        <span class="label">Order Number</span>
+        <span class="value">{{ order()!.orderNumber }}</span>
+      </div>
+
+      <div class="confirmation-card__items">
+        @for (item of order()!.items; track item.id) {
+          <div class="conf-item">
+            <div class="conf-item__info">
+              <p class="conf-item__name">{{ item.productName }}</p>
+              <p class="conf-item__detail">
+                @if (item.variantSize) { {{ item.variantSize }} · }
+                @if (item.variantColor) { {{ item.variantColor }} · }
+                Qty: {{ item.quantity }}
+              </p>
+            </div>
+            <span class="conf-item__price">${{ item.subtotal.toFixed(2) }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="confirmation-card__totals">
+        <div class="total-line">
+          <span>Subtotal</span>
+          <span>${{ order()!.subtotal.toFixed(2) }}</span>
+        </div>
+        <div class="total-line">
+          <span>Shipping</span>
+          <span>{{ order()!.shippingFee === 0 ? 'FREE' : '$' + order()!.shippingFee.toFixed(2) }}</span>
+        </div>
+        <div class="total-line total-line--grand">
+          <span>Total</span>
+          <span>${{ order()!.totalPrice.toFixed(2) }}</span>
+        </div>
+      </div>
+
+      <div class="confirmation-card__address">
+        <h4>Shipping To</h4>
+        <p>{{ order()!.shippingAddress.fullName }}</p>
+        <p>{{ order()!.shippingAddress.phone }}</p>
+        <p>{{ order()!.shippingAddress.addressLine }}, {{ order()!.shippingAddress.ward }},
+           {{ order()!.shippingAddress.district }}, {{ order()!.shippingAddress.province }}</p>
+      </div>
+
+      <div class="confirmation-card__actions">
+        <a [routerLink]="['/orders', order()!.id]" class="btn btn--outline">View Order Details</a>
+        <a routerLink="/products" class="btn btn--primary">Continue Shopping</a>
+      </div>
+    </div>
+  }
+</div>

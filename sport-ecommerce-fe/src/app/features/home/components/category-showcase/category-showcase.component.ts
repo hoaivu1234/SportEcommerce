@@ -1,54 +1,55 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { CategoryService, CategoryTreeNode } from '../../../admin/categories/services/category.service';
 
-interface Category {
+interface DepartmentColumn {
+  id: number;
   name: string;
-  image: string;
-  count: number;
-  featured?: boolean;
+  subCategories: { id: number; name: string }[];
 }
 
 @Component({
   selector: 'app-category-showcase',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './category-showcase.component.html',
   styleUrl: './category-showcase.component.css',
 })
-export class CategoryShowcaseComponent {
-  categories: Category[] = [
-    {
-      name: 'Running',
-      image: 'https://images.unsplash.com/photo-1461897037042-96e29c3a0adf?w=700&q=80',
-      count: 124,
-      featured: true,
-    },
-    {
-      name: 'Team Sports',
-      image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=700&q=80',
-      count: 87,
-      featured: true,
-    },
-    {
-      name: 'Yoga Retreat',
-      image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=700&q=80',
-      count: 65,
-      featured: true,
-    },
-    {
-      name: 'Cycling',
-      image: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=700&q=80',
-      count: 98,
-    },
-    {
-      name: 'Swimming',
-      image: 'https://images.unsplash.com/photo-1530549387789-4c1017266635?w=700&q=80',
-      count: 53,
-    },
-    {
-      name: 'Fitness',
-      image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=700&q=80',
-      count: 112,
-    },
-  ];
+export class CategoryShowcaseComponent implements OnInit {
+  private readonly categoryService = inject(CategoryService);
+
+  departments = signal<DepartmentColumn[]>([]);
+  isLoading = signal(true);
+
+  ngOnInit(): void {
+    this.categoryService.getTreeCategories().subscribe({
+      next: (res) => {
+        this.departments.set(
+          res.data
+            .filter(root => (root.children ?? []).length > 0)
+            .map(root => ({
+              id: root.id,
+              name: root.name,
+              // Level-2 children are the sport-domain categories (Football Shoes, etc.)
+              subCategories: (root.children ?? []).map(child => ({
+                id: child.id,
+                name: child.name,
+              })),
+            }))
+        );
+        this.isLoading.set(false);
+      },
+      error: () => this.isLoading.set(false),
+    });
+  }
+
+  /** Maps Level-1 department name to a Font Awesome icon class. */
+  getDeptIcon(name: string): string {
+    const n = name.toLowerCase();
+    if (n.includes('shoe') || n.includes('boot') || n.includes('footwear')) return 'fa-shoe-prints';
+    if (n.includes('cloth') || n.includes('apparel') || n.includes('wear')) return 'fa-shirt';
+    if (n.includes('accessor')) return 'fa-tag';
+    return 'fa-layer-group';
+  }
 }

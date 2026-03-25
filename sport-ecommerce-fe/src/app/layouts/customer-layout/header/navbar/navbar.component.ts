@@ -2,6 +2,7 @@ import { Component, HostListener, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../../features/auth/services/auth.service';
+import { CartStateService } from '../../../../features/cart/services/cart-state.service';
 import { LoginPopupComponent } from './login-popup/login-popup.component';
 import { UserDropdownComponent } from './user-dropdown/user-dropdown.component';
 
@@ -15,11 +16,14 @@ import { UserDropdownComponent } from './user-dropdown/user-dropdown.component';
 export class NavbarComponent {
   isScrolled = signal(false);
   mobileMenuOpen = signal(false);
-  cartCount = signal(3);
   loginPopupOpen = signal(false);
   userDropdownOpen = signal(false);
 
   readonly authService = inject(AuthService);
+  readonly cartState   = inject(CartStateService);
+
+  /** Live cart item count from reactive state */
+  get cartCount(): number { return this.cartState.itemCount(); }
 
   navLinks = [
     { label: 'Football', path: '/products/football' },
