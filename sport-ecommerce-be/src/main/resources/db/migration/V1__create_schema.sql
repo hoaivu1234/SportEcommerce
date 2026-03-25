@@ -105,6 +105,7 @@ CREATE TABLE carts (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -113,6 +114,8 @@ CREATE TABLE cart_items (
     cart_id BIGINT,
     product_variant_id BIGINT,
     quantity INT,
+    price_snapshot DECIMAL(12,2),
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cart_id) REFERENCES carts(id),
     FOREIGN KEY (product_variant_id) REFERENCES product_variants(id)
 );
@@ -120,12 +123,17 @@ CREATE TABLE cart_items (
 CREATE TABLE orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT,
-    order_number VARCHAR(100),
+    order_number VARCHAR(100) UNIQUE,
     total_price DECIMAL(12,2),
-    status VARCHAR(30),
+    subtotal DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    shipping_fee DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    status VARCHAR(30) DEFAULT 'PENDING',
     payment_status VARCHAR(30),
     shipping_address TEXT,
+    notes TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -137,6 +145,10 @@ CREATE TABLE order_items (
     price DECIMAL(12,2),
     quantity INT,
     subtotal DECIMAL(12,2),
+    variant_sku VARCHAR(100),
+    variant_size VARCHAR(50),
+    variant_color VARCHAR(50),
+    product_image_url VARCHAR(500),
     FOREIGN KEY (order_id) REFERENCES orders(id),
     FOREIGN KEY (product_variant_id) REFERENCES product_variants(id)
 );
@@ -192,16 +204,14 @@ CREATE TABLE product_views (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+-- Indexes
 CREATE INDEX idx_product_category ON products(category_id);
-
 CREATE INDEX idx_product_price ON products(price);
-
 CREATE INDEX idx_order_user ON orders(user_id);
-
 CREATE INDEX idx_review_product ON reviews(product_id);
-
 CREATE INDEX idx_product_is_deleted ON products (is_deleted);
-
 CREATE INDEX idx_refresh_token ON refresh_tokens(token);
-
 CREATE INDEX idx_refresh_user ON refresh_tokens(user_id);
+CREATE INDEX idx_orders_order_number ON orders(order_number);
+CREATE INDEX idx_orders_status       ON orders(status);
+CREATE INDEX idx_orders_created_at   ON orders(created_at);

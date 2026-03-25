@@ -1,9 +1,11 @@
-.category-section {
+/* ── Section ────────────────────────────────────────────────────────────── */
+
+.dept-section {
   padding: 72px 0;
   background: var(--color-light-gray);
 }
 
-.category-section__header {
+.dept-section__header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -23,127 +25,136 @@
 
 .view-all-link:hover { gap: 10px; }
 
-/* Grids */
-.category-grid {
+/* ── Grid ────────────────────────────────────────────────────────────────── */
+
+.dept-grid {
   display: grid;
-  gap: 16px;
-}
-
-.category-grid--featured {
   grid-template-columns: repeat(3, 1fr);
-  margin-bottom: 16px;
+  gap: 20px;
 }
 
-.category-grid--secondary {
-  grid-template-columns: repeat(3, 1fr);
-}
+/* ── Department card ─────────────────────────────────────────────────────── */
 
-/* Cards */
-.category-card {
-  position: relative;
+.dept-card {
+  background: #fff;
   border-radius: 12px;
-  overflow: hidden;
-  background-size: cover;
-  background-position: center;
-  cursor: pointer;
-  transition: transform var(--transition), box-shadow var(--transition);
-}
-
-.category-card:hover {
-  transform: scale(1.02);
-  box-shadow: var(--shadow-hover);
-}
-
-.category-card--large {
-  aspect-ratio: 4 / 3;
-}
-
-.category-card--small {
-  aspect-ratio: 16 / 9;
-}
-
-.category-card__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.75) 0%,
-    rgba(0, 0, 0, 0.2) 50%,
-    transparent 100%
-  );
-  transition: background var(--transition);
-}
-
-.category-card:hover .category-card__overlay {
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.85) 0%,
-    rgba(0, 0, 0, 0.3) 50%,
-    rgba(0, 0, 0, 0.1) 100%
-  );
-}
-
-.category-card__content {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 20px 20px 22px;
+  padding: 28px 24px 20px;
+  box-shadow: var(--shadow);
+  transition: box-shadow var(--transition), transform var(--transition);
   display: flex;
   flex-direction: column;
-  gap: 4px;
 }
 
-.category-card__count {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.65);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.dept-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
 }
 
-.category-card__name {
+/* Skeleton placeholder */
+.dept-card--skeleton {
+  min-height: 260px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* ── Card title (Level-1 header) ─────────────────────────────────────────── */
+
+.dept-card__title {
   font-family: var(--font-condensed);
-  font-size: 1.4rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  color: #fff;
   text-transform: uppercase;
-  line-height: 1.1;
+  letter-spacing: 0.5px;
+  color: var(--color-dark);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 16px;
+  margin-bottom: 4px;
+  border-bottom: 2px solid var(--color-border);
 }
 
-.category-card__btn {
+.dept-card__icon {
+  color: var(--color-primary);
+  font-size: 0.95rem;
+  width: 18px;
+  text-align: center;
+}
+
+/* ── Sub-category list (Level-2 links) ───────────────────────────────────── */
+
+.dept-card__links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  margin-bottom: 16px;
+  padding-top: 8px;
+}
+
+.dept-card__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  transition:
+    background var(--transition),
+    color var(--transition),
+    padding-left var(--transition);
+}
+
+.dept-card__link:hover {
+  background: var(--color-light-gray);
+  color: var(--color-primary);
+  padding-left: 16px;
+}
+
+.dept-card__link i {
+  font-size: 0.6rem;
+  color: var(--color-gray);
+  transition: color var(--transition);
+}
+
+.dept-card__link:hover i {
+  color: var(--color-primary);
+}
+
+/* ── "All Shoes →" footer link ───────────────────────────────────────────── */
+
+.dept-card__view-all {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 8px;
-  padding: 7px 16px;
-  background: var(--color-primary);
-  color: #fff;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.78rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  align-self: flex-start;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity var(--transition), transform var(--transition), background var(--transition);
+  color: var(--color-primary);
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border);
+  transition: gap var(--transition);
 }
 
-.category-card:hover .category-card__btn {
-  opacity: 1;
-  transform: translateY(0);
-}
+.dept-card__view-all:hover { gap: 10px; }
 
-.category-card__btn:hover {
-  background: var(--color-primary-dark);
-}
+/* ── Responsive ──────────────────────────────────────────────────────────── */
 
 @media (max-width: 768px) {
-  .category-grid--featured,
-  .category-grid--secondary {
+  .dept-grid {
     grid-template-columns: 1fr 1fr;
   }
-  .category-section__header {
+
+  .dept-section__header {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
@@ -151,8 +162,7 @@
 }
 
 @media (max-width: 480px) {
-  .category-grid--featured,
-  .category-grid--secondary {
+  .dept-grid {
     grid-template-columns: 1fr;
   }
 }

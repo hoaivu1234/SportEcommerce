@@ -4,6 +4,7 @@ import {
   EventEmitter,
   inject,
   input,
+  signal,
   computed,
   effect,
 } from '@angular/core';
@@ -15,8 +16,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { CategoryService } from '../../services/category.service';
-import { CategoryStoreService } from '../../services/category-store.service';
+import { CategoryService, CategoryResponse } from '../../services/category.service';
 import { ToastService } from '../../../../../core/services/toast.service';
 
 @Component({
@@ -40,24 +40,35 @@ export class CategoryFormComponent {
     this.mode() === 'edit' ? 'Edit Category' : 'New Category',
   );
 
-  /** All categories except the one being edited (prevents self-parent) */
-  filteredCategories = computed(() => {
-    const all = this.categoryStore.allFlat();
+  /**
+   * Level-2 (domain) categories — the only valid parent choices.
+   * Must be a signal so that parentOptions() re-computes when the HTTP call resolves.
+   */
+  private readonly level2Categories = signal<CategoryResponse[]>([]);
+
+  parentOptions = computed(() => {
     const cat = this.category();
+    const all = this.level2Categories();
     return this.mode() === 'edit' && cat
-      ? all.filter((c: any) => c.id !== cat.id)
+      ? all.filter(c => c.id !== cat.id)
       : all;
   });
 
   private readonly fb = inject(FormBuilder);
-  private readonly categoryStore = inject(CategoryStoreService);
   private readonly categoryService = inject(CategoryService);
   private readonly toastService = inject(ToastService);
 
   constructor() {
+    // parentId is always required — only leaf (level-3) categories can be created
     this.form = this.fb.group({
       name: ['', [Validators.required]],
-      parentId: [null],
+      parentId: [null, [Validators.required]],
+    });
+
+    // Load valid parent options (level-2 only) — .set() triggers computed() re-evaluation
+    this.categoryService.getLevel2Categories().subscribe({
+      next: (res) => this.level2Categories.set(res.data),
+      error: () => this.toastService.error('Failed to load parent categories.'),
     });
 
     effect(() => {
@@ -71,7 +82,10 @@ export class CategoryFormComponent {
   }
 
   onSubmit(): void {
-    if (!this.form.valid) return;
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     if (this.mode() === 'create') {
       this.categoryService.createCategory(this.form.value).subscribe({
@@ -80,8 +94,9 @@ export class CategoryFormComponent {
           this.saved.emit();
           this.close.emit();
         },
-        error: () => {
-          this.toastService.error('Failed to create category. Please try again.');
+        error: (err) => {
+          const msg = err?.error?.resolvedMessage ?? err?.error?.message ?? 'Failed to create category.';
+          this.toastService.error(msg);
         },
       });
     } else {
@@ -91,8 +106,9 @@ export class CategoryFormComponent {
           this.saved.emit();
           this.close.emit();
         },
-        error: () => {
-          this.toastService.error('Failed to update category. Please try again.');
+        error: (err) => {
+          const msg = err?.error?.resolvedMessage ?? err?.error?.message ?? 'Failed to update category.';
+          this.toastService.error(msg);
         },
       });
     }

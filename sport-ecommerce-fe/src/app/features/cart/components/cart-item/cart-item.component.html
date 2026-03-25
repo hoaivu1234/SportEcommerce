@@ -1,37 +1,37 @@
 <div class="cart-item">
   <div class="cart-item__image-wrap">
-    <img
-      [src]="'https://picsum.photos/seed/' + item.seed + '/200/200'"
-      [alt]="item.name"
-      class="cart-item__image"
-    />
+    @if (item.imageUrl) {
+      <img [src]="item.imageUrl" [alt]="item.productName" class="cart-item__image" />
+    } @else {
+      <div class="cart-item__image cart-item__image--placeholder">
+        <i class="fas fa-image"></i>
+      </div>
+    }
   </div>
 
   <div class="cart-item__details">
     <div class="cart-item__top">
       <div>
-        <h4 class="cart-item__name">{{ item.name }}</h4>
+        <h4 class="cart-item__name">{{ item.productName }}</h4>
         <div class="cart-item__meta">
-          @if (item.size) {
-            <span>Size: {{ item.size }}</span>
-          }
-          @if (item.color) {
-            <span>Color: {{ item.color }}</span>
-          }
+          @if (item.size)  { <span>Size: {{ item.size }}</span> }
+          @if (item.color) { <span>Color: {{ item.color }}</span> }
+          @if (item.sku)   { <span class="cart-item__sku">SKU: {{ item.sku }}</span> }
         </div>
+        <div class="cart-item__unit-price">{{ item.priceSnapshot | currency }} each</div>
       </div>
-      <button class="cart-item__remove" (click)="removeItem()" title="Remove item">
+      <button class="cart-item__remove" (click)="onRemove()" title="Remove item">
         <i class="fas fa-trash-alt"></i>
       </button>
     </div>
 
     <div class="cart-item__bottom">
       <div class="qty-control">
-        <button class="qty-btn" (click)="decreaseQty()" [disabled]="item.quantity <= 1">
+        <button class="qty-btn" (click)="decrease()" [disabled]="item.quantity <= 1">
           <i class="fas fa-minus"></i>
         </button>
         <span class="qty-value">{{ item.quantity }}</span>
-        <button class="qty-btn" (click)="increaseQty()">
+        <button class="qty-btn" (click)="increase()">
           <i class="fas fa-plus"></i>
         </button>
       </div>

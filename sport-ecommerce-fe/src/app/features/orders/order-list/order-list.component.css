@@ -1,0 +1,157 @@
+.order-list-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.order-list-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Loading skeleton ─────────────────────────────────────────────────────── */
+
+.order-list__loading {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.order-skeleton {
+  height: 56px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Empty / error states ─────────────────────────────────────────────────── */
+
+.order-list__empty,
+.order-list__error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem 0;
+  color: #888;
+}
+
+.order-list__empty i,
+.order-list__error i {
+  font-size: 3rem;
+}
+
+.order-list__error i { color: #e74c3c; }
+
+/* ── Table ────────────────────────────────────────────────────────────────── */
+
+.order-list__table-wrap {
+  overflow-x: auto;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
+}
+
+.order-table th {
+  text-align: left;
+  padding: .75rem 1rem;
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 2px solid #eee;
+}
+
+.order-table td {
+  padding: .75rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+.order-table tr:hover td { background: #fafafa; }
+
+.order-number {
+  font-family: monospace;
+  font-size: .85rem;
+  color: #333;
+}
+
+.view-link {
+  color: #ff6b35;
+  font-weight: 600;
+  text-decoration: none;
+}
+.view-link:hover { text-decoration: underline; }
+
+/* ── Badges ───────────────────────────────────────────────────────────────── */
+
+.badge {
+  display: inline-block;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.badge--warning  { background: #fff3cd; color: #856404; }
+.badge--info     { background: #cce5ff; color: #004085; }
+.badge--primary  { background: #d0e8ff; color: #0056b3; }
+.badge--success  { background: #d4edda; color: #155724; }
+.badge--danger   { background: #f8d7da; color: #721c24; }
+.badge--default  { background: #e2e3e5; color: #383d41; }
+
+/* ── Pagination ───────────────────────────────────────────────────────────── */
+
+.order-list__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.order-list__pagination button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-list__pagination button:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+.order-list__pagination span {
+  font-size: .875rem;
+  color: #666;
+}
+
+/* ── CTA button ───────────────────────────────────────────────────────────── */
+
+.btn {
+  padding: .75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: .9rem;
+}
+
+.btn--primary { background: #ff6b35; color: #fff; }
+.btn--primary:hover { background: #e85d2a; }

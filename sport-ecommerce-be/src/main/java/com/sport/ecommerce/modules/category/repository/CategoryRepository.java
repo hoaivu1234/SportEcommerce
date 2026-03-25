@@ -64,4 +64,18 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     boolean existsByName(String name);
 
     boolean existsBySlugAndIdNot(String slug, Long id);
+
+    Optional<Category> findByName(String name);
+
+    /** Level-1: root categories (no parent) */
+    @Query("SELECT c FROM Category c WHERE c.parent IS NULL ORDER BY c.name ASC")
+    List<Category> findAllLevel1();
+
+    /** Level-2: domain categories (parent exists, grandparent does not) */
+    @Query("SELECT c FROM Category c JOIN c.parent p WHERE p.parent IS NULL ORDER BY c.name ASC")
+    List<Category> findAllLevel2();
+
+    /** Level-3: leaf categories (parent and grandparent both exist) */
+    @Query("SELECT c FROM Category c JOIN c.parent p JOIN p.parent gp ORDER BY c.name ASC")
+    List<Category> findAllLevel3();
 }

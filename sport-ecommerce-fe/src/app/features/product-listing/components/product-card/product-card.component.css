@@ -6,12 +6,19 @@
   transition: box-shadow var(--transition), transform var(--transition);
   display: flex;
   flex-direction: column;
+  text-decoration: none;
 }
 
 .product-card:hover {
   box-shadow: var(--shadow-hover);
   transform: translateY(-3px);
 }
+
+.product-card--oos {
+  opacity: 0.75;
+}
+
+/* ── Image ────────────────────────────────────────────────────────────────── */
 
 .product-card__image-wrap {
   position: relative;
@@ -30,36 +37,48 @@
   transform: scale(1.05);
 }
 
+/* ── Badges ───────────────────────────────────────────────────────────────── */
+
 .product-card__badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  padding: 4px 10px;
-  font-size: 0.7rem;
+  top: 10px;
+  left: 10px;
+  padding: 3px 8px;
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   border-radius: 4px;
   text-transform: uppercase;
 }
 
-.badge--sale {
-  background: var(--color-primary);
+.badge--sale { background: var(--color-primary); color: #fff; }
+.badge--new  { background: var(--color-dark);    color: #fff; }
+
+.product-card__oos-label {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 12px;
+  background: rgba(0,0,0,0.65);
   color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
+  white-space: nowrap;
 }
 
-.badge--new {
-  background: var(--color-dark);
-  color: #fff;
-}
+/* ── Wishlist ─────────────────────────────────────────────────────────────── */
 
 .product-card__wishlist {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 10px;
+  right: 10px;
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.92);
   border: none;
   cursor: pointer;
   display: flex;
@@ -68,19 +87,16 @@
   color: var(--color-gray);
   opacity: 0;
   transition: opacity var(--transition), color var(--transition);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
-.product-card:hover .product-card__wishlist {
-  opacity: 1;
-}
+.product-card:hover .product-card__wishlist { opacity: 1; }
+.product-card__wishlist:hover { color: var(--color-primary); }
 
-.product-card__wishlist:hover {
-  color: var(--color-primary);
-}
+/* ── Body ─────────────────────────────────────────────────────────────────── */
 
 .product-card__body {
-  padding: 14px 16px 16px;
+  padding: 12px 14px 14px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -88,28 +104,30 @@
 }
 
 .product-card__name {
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--color-dark);
   line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.product-card__stars {
-  display: flex;
-  gap: 2px;
-  color: #f5a623;
-  font-size: 12px;
-}
-
-.product-card__stars .star--empty {
-  color: #ddd;
-}
+/* ── Footer ───────────────────────────────────────────────────────────────── */
 
 .product-card__footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: auto;
+  gap: 8px;
+}
+
+.product-card__pricing {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .product-card__price {
@@ -118,11 +136,23 @@
   color: var(--color-dark);
 }
 
+.product-card__price--sale {
+  color: var(--color-primary);
+}
+
+.product-card__original-price {
+  font-size: 0.78rem;
+  color: var(--color-gray);
+  text-decoration: line-through;
+}
+
+/* ── Add to cart button ───────────────────────────────────────────────────── */
+
 .btn-add-cart {
   background: var(--color-primary);
   color: #fff;
   border: none;
-  padding: 7px 12px;
+  padding: 7px 10px;
   border-radius: 6px;
   font-size: 0.78rem;
   font-weight: 600;
@@ -130,9 +160,15 @@
   transition: background var(--transition);
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.btn-add-cart:hover {
-  background: var(--color-primary-dark);
+.btn-add-cart:hover:not(:disabled) { background: var(--color-primary-dark); }
+
+.btn-add-cart:disabled {
+  background: var(--color-gray);
+  cursor: not-allowed;
+  opacity: 0.6;
 }

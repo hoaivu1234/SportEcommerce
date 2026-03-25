@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(AppConstant.API_PREFIX + "/categories")
+@RequestMapping(AppConstant.ADMIN_PREFIX + "/categories")
 @RequiredArgsConstructor
 public class CategoryController {
 
@@ -38,6 +38,24 @@ public class CategoryController {
     @GetMapping("/all")
     public ResponseEntity<ApiResponse<List<CategoryResponse>>> getAllFlat() {
         return ResponseEntity.ok(ApiResponse.success(categoryService.getAllFlat()));
+    }
+
+    /** Root (level-1) categories — fixed, never create/modify. */
+    @GetMapping("/level1")
+    public ResponseEntity<ApiResponse<List<CategoryResponse>>> getLevel1() {
+        return ResponseEntity.ok(ApiResponse.success(categoryService.getLevel1Categories()));
+    }
+
+    /** Domain (level-2) categories — fixed, valid parents for new leaf categories. */
+    @GetMapping("/level2")
+    public ResponseEntity<ApiResponse<List<CategoryResponse>>> getLevel2() {
+        return ResponseEntity.ok(ApiResponse.success(categoryService.getLevel2Categories()));
+    }
+
+    /** Leaf (level-3) categories — the only level assignable to products. */
+    @GetMapping("/level3")
+    public ResponseEntity<ApiResponse<List<CategoryResponse>>> getLevel3() {
+        return ResponseEntity.ok(ApiResponse.success(categoryService.getLevel3Categories()));
     }
 
     @GetMapping("/tree")

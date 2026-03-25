@@ -12,7 +12,7 @@ import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl, FormsMod
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ProductService } from '../../services/product.service';
-import { CategoryService, CategoryFlatResponse } from '../../../../../features/admin/categories/services/category.service';
+import { CategoryService, CategoryResponse } from '../../../../../features/admin/categories/services/category.service';
 import { CloudinaryService } from '../../../../../core/services/cloudinary.service';
 import { ToastService } from '../../../../../core/services/toast.service';
 import { ProductImageRequest, ProductVariantRequest } from '../../../../../models/product.model';
@@ -66,7 +66,7 @@ export class ProductFormComponent implements OnInit {
     brand: ['', Validators.maxLength(100)],
     price: [null as number | null, [Validators.required, Validators.min(0.01)]],
     discountPrice: [null as number | null],
-    categoryId: [null as number | null],
+    categoryId: [null as number | null, [Validators.required]],
     status: ['ACTIVE', Validators.required],
   });
 
@@ -81,7 +81,7 @@ export class ProductFormComponent implements OnInit {
   variants: VariantRow[] = [];
 
   // ── Categories (for dropdown) ─────────────────────────────────────────────
-  categories: CategoryFlatResponse[] = [];
+  categories: CategoryResponse[] = [];
 
   // ── UI State ──────────────────────────────────────────────────────────────
   isSubmitting = signal(false);
@@ -103,10 +103,10 @@ export class ProductFormComponent implements OnInit {
   // ── Lifecycle ─────────────────────────────────────────────────────────────
 
   ngOnInit(): void {
-    // Load categories for the dropdown
-    this.categoryService.getAllCategories().subscribe({
+    // Load only leaf (level-3) categories — the only valid choice for products
+    this.categoryService.getLevel3Categories().subscribe({
       next: (res) => (this.categories = res.data),
-      error: () => console.error('Failed to load categories'),
+      error: () => this.toast.error('Failed to load categories.'),
     });
 
     // Check if we are in edit mode

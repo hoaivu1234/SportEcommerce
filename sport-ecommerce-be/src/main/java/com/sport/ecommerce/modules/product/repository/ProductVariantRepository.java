@@ -2,11 +2,14 @@ package com.sport.ecommerce.modules.product.repository;
 
 import com.sport.ecommerce.modules.product.entity.variant.ProductVariant;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.persistence.LockModeType;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,4 +56,12 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariant, 
 
     @Transactional
     void deleteByProductId(Long productId);
+
+    /**
+     * Loads a variant with a PESSIMISTIC_WRITE lock so that concurrent checkout
+     * requests cannot over-sell the same stock.
+     */
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT pv FROM ProductVariant pv WHERE pv.id = :id")
+    java.util.Optional<ProductVariant> findByIdWithLock(@Param("id") Long id);
 }

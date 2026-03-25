@@ -4,6 +4,7 @@ import com.sport.ecommerce.common.dto.response.PageResponse;
 import com.sport.ecommerce.exception.custom.BusinessException;
 import com.sport.ecommerce.modules.category.entity.Category;
 import com.sport.ecommerce.modules.category.repository.CategoryRepository;
+import com.sport.ecommerce.modules.category.service.CategoryService;
 import com.sport.ecommerce.modules.product.dto.request.ProductFilterRequest;
 import com.sport.ecommerce.modules.product.dto.request.ProductImageRequest;
 import com.sport.ecommerce.modules.product.dto.request.ProductRequest;
@@ -47,6 +48,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductImageRepository productImageRepository;
     private final ProductMapper productMapper;
     private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     @Override
     @Transactional(readOnly = true)
@@ -324,10 +326,20 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND.value(), "Product not found with id: " + id));
     }
 
+    /**
+     * Fetches and validates a category for product assignment.
+     * Throws if {@code categoryId} is null, not found, or not a leaf (level-3) category.
+     */
     private Category resolveCategory(Long categoryId) {
-        if (categoryId == null) return null;
+        if (categoryId == null) {
+            throw new BusinessException(HttpStatus.BAD_REQUEST.value(),
+                    "Category is required. Products must be assigned to a leaf (level-3) category.");
+        }
+        // Validates hierarchy level — throws BusinessException if not leaf
+        categoryService.validateLeafCategory(categoryId);
         return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND.value(), "Category not found with id: " + categoryId));
+                .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND.value(),
+                        "Category not found with id: " + categoryId));
     }
 
     private String generateUniqueSlug(String name, Long excludeId) {

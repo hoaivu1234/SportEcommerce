@@ -1,4 +1,4 @@
-<a [routerLink]="['/products', product.id]" class="product-card">
+<a [routerLink]="['/products', product.id]" class="product-card" [class.product-card--oos]="isOutOfStock">
   <div class="product-card__image-wrap">
     <img
       [src]="imageUrl"
@@ -7,12 +7,25 @@
       loading="lazy"
       (error)="onImageError($event)"
     />
+
     @if (product.badge) {
-      <span class="product-card__badge" [class.badge--sale]="product.badge === 'Sale'" [class.badge--new]="product.badge === 'New'">
-        {{ product.badge }}
-      </span>
+      <span
+        class="product-card__badge"
+        [class.badge--sale]="product.badge === 'Sale'"
+        [class.badge--new]="product.badge === 'New'"
+      >{{ product.badge }}</span>
     }
-    <button class="product-card__wishlist" title="Add to Wishlist" (click)="$event.preventDefault()">
+
+    @if (isOutOfStock) {
+      <span class="product-card__oos-label">Out of Stock</span>
+    }
+
+    <button
+      class="product-card__wishlist"
+      title="Add to Wishlist"
+      aria-label="Add to Wishlist"
+      (click)="$event.preventDefault()"
+    >
       <i class="far fa-heart"></i>
     </button>
   </div>
@@ -21,9 +34,17 @@
     <p class="product-card__name">{{ product.name }}</p>
 
     <div class="product-card__footer">
-      <span class="product-card__price">{{ product.price | currency }}</span>
-      <button class="btn-add-cart" (click)="$event.preventDefault()">
-        <i class="fas fa-shopping-bag"></i> Add to Cart
+      <div class="product-card__pricing">
+        <span class="product-card__price" [class.product-card__price--sale]="product.originalPrice">
+          {{ product.price | currency }}
+        </span>
+        @if (product.originalPrice) {
+          <span class="product-card__original-price">{{ product.originalPrice | currency }}</span>
+        }
+      </div>
+      <button class="btn-add-cart" (click)="$event.preventDefault()" [disabled]="isOutOfStock">
+        <i class="fas fa-shopping-bag"></i>
+        <span>Add</span>
       </button>
     </div>
   </div>

@@ -3,6 +3,7 @@ package com.sport.ecommerce.modules.cart.controller;
 import com.sport.ecommerce.common.constant.AppConstant;
 import com.sport.ecommerce.common.dto.response.ApiResponse;
 import com.sport.ecommerce.modules.cart.dto.request.AddToCartRequest;
+import com.sport.ecommerce.modules.cart.dto.request.MergeCartRequest;
 import com.sport.ecommerce.modules.cart.dto.request.UpdateCartItemRequest;
 import com.sport.ecommerce.modules.cart.dto.response.CartResponse;
 import com.sport.ecommerce.modules.cart.service.CartService;
@@ -49,5 +50,21 @@ public class CartController {
     public ResponseEntity<ApiResponse<Void>> removeItem(@PathVariable Long itemId) {
         cartService.removeItem(itemId);
         return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    /**
+     * Merges a guest (localStorage) cart into the authenticated user's server cart.
+     * Called automatically after login when the guest had items in localStorage.
+     */
+    @PostMapping("/merge")
+    public ResponseEntity<ApiResponse<CartResponse>> mergeGuestCart(
+            @Valid @RequestBody MergeCartRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(cartService.mergeGuestCart(request)));
+    }
+
+    /** Removes all items from the current user's cart. */
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<CartResponse>> clearCart() {
+        return ResponseEntity.ok(ApiResponse.success(cartService.clearCart()));
     }
 }

@@ -4,7 +4,7 @@
     <nav class="breadcrumb">
       <a routerLink="/">Home</a>
       <i class="fas fa-chevron-right"></i>
-      <span>Performance Footwear</span>
+      <span>Performance Gear</span>
     </nav>
 
     <!-- Page Header -->
@@ -12,21 +12,60 @@
       <h1 class="page-header__title">PERFORMANCE GEAR</h1>
     </div>
 
+    <!-- Active Filter Chips -->
+    @if (hasActiveFilters) {
+      <div class="active-filters">
+        @for (chip of activeChips; track chip.key) {
+          <span class="filter-chip">
+            {{ chip.label }}
+            <button
+              class="filter-chip__remove"
+              (click)="removeChip(chip.key)"
+              [attr.aria-label]="'Remove filter ' + chip.label"
+            >
+              <i class="fas fa-times"></i>
+            </button>
+          </span>
+        }
+        <button class="clear-all-btn" (click)="onClearAll()">
+          Clear All
+        </button>
+      </div>
+    }
+
     <div class="listing-layout">
       <!-- Filter Sidebar -->
-      <app-filter-sidebar />
+      <app-filter-sidebar
+        [filterState]="filterState()"
+        [categoryTree]="categoryTree()"
+        (filterChange)="onFilterChange($event)"
+        (keywordChange)="onKeywordInput($event)"
+      />
 
       <!-- Main Content -->
       <div class="listing-main">
         <app-sort-bar
           [totalProducts]="totalElements()"
           [viewMode]="viewMode"
+          [sort]="filterState().sort"
           (viewModeChange)="onViewModeChange($event)"
+          (sortChange)="onSortChange($event)"
         />
 
         @if (isLoading()) {
           <div class="loading-state">
-            <i class="fas fa-spinner fa-spin"></i> Loading products…
+            <div class="loading-skeleton-grid">
+              @for (i of [1,2,3,4,5,6]; track i) {
+                <div class="skeleton-card"></div>
+              }
+            </div>
+          </div>
+        } @else if (products().length === 0) {
+          <div class="empty-state">
+            <i class="fas fa-search empty-state__icon"></i>
+            <h3>No products found</h3>
+            <p>Try adjusting your filters or search terms.</p>
+            <button class="btn-primary" (click)="onClearAll()">Clear All Filters</button>
           </div>
         } @else {
           <app-product-grid
@@ -34,7 +73,7 @@
             [viewMode]="viewMode"
             [totalElements]="totalElements()"
             [pageSize]="pageSize"
-            [currentPage]="page()"
+            [currentPage]="filterState().page"
             (pageChange)="onPageChange($event)"
           />
         }

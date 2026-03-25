@@ -1,15 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
-
-export interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  size?: string;
-  color?: string;
-  quantity: number;
-  seed: number;
-}
+import { CartItemResponse } from '../../../../models/cart.model';
 
 @Component({
   selector: 'app-cart-item',
@@ -19,25 +10,25 @@ export interface CartItem {
   styleUrl: './cart-item.component.css',
 })
 export class CartItemComponent {
-  @Input() item!: CartItem;
+  @Input() item!: CartItemResponse;
   @Output() quantityChange = new EventEmitter<{ id: number; qty: number }>();
-  @Output() remove = new EventEmitter<number>();
+  @Output() remove         = new EventEmitter<number>();
 
-  decreaseQty() {
+  decrease(): void {
     if (this.item.quantity > 1) {
       this.quantityChange.emit({ id: this.item.id, qty: this.item.quantity - 1 });
     }
   }
 
-  increaseQty() {
+  increase(): void {
     this.quantityChange.emit({ id: this.item.id, qty: this.item.quantity + 1 });
   }
 
-  removeItem() {
+  onRemove(): void {
     this.remove.emit(this.item.id);
   }
 
   get lineTotal(): number {
-    return this.item.price * this.item.quantity;
+    return this.item.subtotal;
   }
 }

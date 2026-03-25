@@ -1,28 +1,33 @@
 .filter-sidebar {
-  width: 280px;
+  width: 260px;
   flex-shrink: 0;
   background: #fff;
   border: 1px solid var(--color-border);
   border-radius: 8px;
-  padding: 24px;
+  padding: 20px;
+  position: sticky;
+  top: 24px;
+  align-self: flex-start;
 }
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
 
 .filter-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .filter-title {
   font-family: var(--font-condensed);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 1px;
 }
 
 .clear-btn {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--color-primary);
   cursor: pointer;
   background: none;
@@ -30,54 +35,132 @@
   text-decoration: underline;
 }
 
-.clear-btn:hover {
-  color: var(--color-primary-dark);
-}
+.clear-btn:hover { color: var(--color-primary-dark); }
+
+/* ── Sections ─────────────────────────────────────────────────────────────── */
 
 .filter-section {
   border-top: 1px solid var(--color-border);
-  padding: 18px 0;
+  padding: 16px 0;
+}
+
+.filter-section--search {
+  border-top: none;
+  padding-top: 0;
+  margin-bottom: 4px;
 }
 
 .filter-section__title {
   font-family: var(--font-condensed);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--color-dark);
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
+
+/* ── Search ───────────────────────────────────────────────────────────────── */
+
+.search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  color: var(--color-gray);
+  font-size: 0.8rem;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 9px 32px 9px 32px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 6px;
+  font-family: var(--font-primary);
+  font-size: 0.875rem;
+  color: var(--color-dark);
+  outline: none;
+  transition: border-color var(--transition);
+  background: var(--color-light-gray);
+}
+
+.search-input:focus {
+  border-color: var(--color-primary);
+  background: #fff;
+}
+
+.search-clear {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-gray);
+  font-size: 0.75rem;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.search-clear:hover { color: var(--color-dark); }
+
+/* ── Group label (Level-1 parent) ─────────────────────────────────────────── */
+
+.filter-group-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--color-gray);
+  margin: 8px 0 4px;
+}
+
+.filter-group-label:first-of-type { margin-top: 0; }
+
+/* ── Checkbox / Radio labels ──────────────────────────────────────────────── */
 
 .checkbox-label {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   color: var(--color-dark);
   cursor: pointer;
   padding: 4px 0;
   transition: color var(--transition);
 }
 
-.checkbox-label:hover {
-  color: var(--color-primary);
-}
+.checkbox-label:hover { color: var(--color-primary); }
 
-.checkbox-label input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
+.checkbox-label--active { color: var(--color-primary); font-weight: 600; }
+
+.checkbox-label input[type="radio"] {
+  width: 15px;
+  height: 15px;
   accent-color: var(--color-primary);
   cursor: pointer;
 }
 
+/* ── Price Range ──────────────────────────────────────────────────────────── */
+
 .price-display {
   display: flex;
   justify-content: space-between;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   color: var(--color-dark);
+}
+
+.price-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .price-slider {
@@ -86,56 +169,26 @@
   cursor: pointer;
 }
 
-.size-grid {
+.price-presets {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
+  margin-top: 10px;
 }
 
-.size-btn {
-  width: 46px;
-  height: 36px;
-  border: 1.5px solid var(--color-border);
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
+.price-preset {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
   background: #fff;
-  transition: all var(--transition);
-  color: var(--color-dark);
-}
-
-.size-btn:hover {
-  border-color: var(--color-dark);
-}
-
-.size-btn--active {
-  background: var(--color-dark);
-  color: #fff;
-  border-color: var(--color-dark);
-}
-
-.color-swatches {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.color-swatch {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
   cursor: pointer;
-  border: 2px solid transparent;
+  color: var(--color-dark);
   transition: all var(--transition);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
 }
 
-.color-swatch:hover {
-  transform: scale(1.1);
-}
-
-.color-swatch--selected {
+.price-preset:hover {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(232, 82, 26, 0.25);
+  color: var(--color-primary);
 }

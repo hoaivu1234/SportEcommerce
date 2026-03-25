@@ -50,7 +50,23 @@ export const routes: Routes = [
           ),
         canActivate: [authGuard],
       },
+      {
+        path: 'orders',
+        loadComponent: () =>
+          import('./features/orders/order-list/order-list.component').then(
+            (m) => m.OrderListComponent,
+          ),
+        canActivate: [authGuard],
+      },
     ],
+  },
+  {
+    path: 'order-confirmation/:orderNumber',
+    loadComponent: () =>
+      import('./features/orders/order-confirmation/order-confirmation.component').then(
+        (m) => m.OrderConfirmationComponent,
+      ),
+    canActivate: [authGuard],
   },
   {
     path: 'checkout',

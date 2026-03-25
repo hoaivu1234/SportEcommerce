@@ -1,30 +1,66 @@
 <div class="order-summary">
   <div class="os-header">
     <h3>Order Summary</h3>
-    <span class="os-count">{{ items.length }} Items</span>
-  </div>
-  <div class="os-items">
-    @for (item of items; track item.name) {
-      <div class="os-item">
-        <img [src]="item.image" [alt]="item.name" class="os-item__img" />
-        <div class="os-item__info">
-          <p class="os-item__name">{{ item.name }}</p>
-          <p class="os-item__detail">{{ item.detail }}</p>
-        </div>
-        <span class="os-item__price">\${{ item.price.toFixed(2) }}</span>
-      </div>
+    @if (cart) {
+      <span class="os-count">{{ cart.totalItems }} item(s)</span>
     }
   </div>
-  <div class="os-lines">
-    <div class="os-line"><span>Subtotal</span><span>\${{ subtotal.toFixed(2) }}</span></div>
-    <div class="os-line"><span>Shipping (Standard)</span><span class="free">FREE</span></div>
-    <div class="os-line"><span>Estimated Tax</span><span>\${{ tax.toFixed(2) }}</span></div>
-  </div>
-  <div class="os-total"><span>Total</span><span>\${{ total.toFixed(2) }}</span></div>
-  <button class="place-order-btn">Place Order <i class="fas fa-arrow-right"></i></button>
-  <p class="os-guarantee"><i class="fas fa-check-circle"></i> Norton Secured · Money Back Guarantee</p>
-  <div class="os-promo">
-    <input type="text" [(ngModel)]="promoCode" placeholder="Promo Code" />
-    <button>Apply</button>
-  </div>
+
+  @if (cart) {
+    <div class="os-items">
+      @for (item of cart.items; track item.id) {
+        <div class="os-item">
+          @if (item.imageUrl) {
+            <img [src]="item.imageUrl" [alt]="item.productName" class="os-item__img" />
+          } @else {
+            <div class="os-item__img os-item__img--placeholder">
+              <i class="fas fa-image"></i>
+            </div>
+          }
+          <div class="os-item__info">
+            <p class="os-item__name">{{ item.productName }}</p>
+            <p class="os-item__detail">
+              @if (item.size) { Size: {{ item.size }} · }
+              @if (item.color) { {{ item.color }} · }
+              Qty: {{ item.quantity }}
+            </p>
+          </div>
+          <span class="os-item__price">${{ item.subtotal.toFixed(2) }}</span>
+        </div>
+      }
+    </div>
+
+    <div class="os-lines">
+      <div class="os-line">
+        <span>Subtotal</span>
+        <span>${{ cart.totalPrice.toFixed(2) }}</span>
+      </div>
+      <div class="os-line">
+        <span>Shipping</span>
+        <span class="free">FREE</span>
+      </div>
+    </div>
+    <div class="os-total">
+      <span>Total</span>
+      <span>${{ cart.totalPrice.toFixed(2) }}</span>
+    </div>
+  } @else {
+    <div class="os-loading">
+      <div class="spinner"></div>
+      <p>Loading cart...</p>
+    </div>
+  }
+
+  <button
+    class="place-order-btn"
+    [disabled]="!cart || isSubmitting"
+    (click)="placeOrder.emit()"
+  >
+    @if (isSubmitting) {
+      <span class="spinner spinner--sm"></span> Placing Order...
+    } @else {
+      Place Order <i class="fas fa-arrow-right"></i>
+    }
+  </button>
+  <p class="os-guarantee"><i class="fas fa-check-circle"></i> Secure &amp; Money-Back Guaranteed</p>
 </div>

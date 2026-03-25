@@ -2,15 +2,15 @@ package com.sport.ecommerce.modules.order.entity;
 
 import com.sport.ecommerce.modules.product.entity.variant.ProductVariant;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "order_items")
-@Data
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderItem {
@@ -20,22 +20,44 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
+    /**
+     * Soft-link to the variant — kept nullable so that an order history
+     * survives even if the variant is later deleted from the catalogue.
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_variant_id")
     private ProductVariant productVariant;
 
-    @Column(length = 255)
+    // ── Price / quantity snapshots (immutable after order is placed) ─────────
+
+    @Column(name = "product_name", length = 255, nullable = false)
     private String productName;
 
-    @Column(precision = 12, scale = 2)
+    /** Unit price captured at checkout time. */
+    @Column(precision = 12, scale = 2, nullable = false)
     private BigDecimal price;
 
+    @Column(nullable = false)
     private Integer quantity;
 
-    @Column(precision = 12, scale = 2)
+    /** price × quantity */
+    @Column(precision = 12, scale = 2, nullable = false)
     private BigDecimal subtotal;
 
+    // ── Variant attribute snapshots ──────────────────────────────────────────
+
+    @Column(name = "variant_sku", length = 100)
+    private String variantSku;
+
+    @Column(name = "variant_size", length = 50)
+    private String variantSize;
+
+    @Column(name = "variant_color", length = 50)
+    private String variantColor;
+
+    @Column(name = "product_image_url", length = 500)
+    private String productImageUrl;
 }

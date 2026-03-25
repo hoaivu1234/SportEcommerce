@@ -1,6 +1,8 @@
 package com.sport.ecommerce.modules.cart.service.impl;
 
 import com.sport.ecommerce.modules.cart.dto.request.AddToCartRequest;
+import com.sport.ecommerce.modules.cart.dto.request.MergeCartItemRequest;
+import com.sport.ecommerce.modules.cart.dto.request.MergeCartRequest;
 import com.sport.ecommerce.modules.cart.dto.request.UpdateCartItemRequest;
 import com.sport.ecommerce.modules.cart.dto.response.CartItemResponse;
 import com.sport.ecommerce.modules.cart.dto.response.CartResponse;
@@ -121,6 +123,64 @@ public class CartServiceImpl implements CartService {
         CartItem item = findOwnedItem(itemId, cart);
         cartItemRepository.delete(item);
         log.debug("Removed cart item {}", itemId);
+    }
+
+    @Override
+    @Transactional
+    public CartResponse mergeGuestCart(MergeCartRequest request) {
+        User user = getCurrentUser();
+        Cart cart = getOrCreateCart(user);
+
+        for (MergeCartItemRequest guestItem : request.getItems()) {
+            if (guestItem.getVariantId() == null || guestItem.getQuantity() == null
+                    || guestItem.getQuantity() < 1) {
+                continue; // skip invalid entries silently
+            }
+
+            ProductVariant variant;
+            try {
+                variant = resolveActiveVariant(guestItem.getVariantId());
+            } catch (BusinessException e) {
+                log.warn("Skipping guest cart item — variant {} not found or inactive",
+                        guestItem.getVariantId());
+                continue; // skip unavailable variants instead of aborting the whole merge
+            }
+
+            int available = stockOf(variant);
+            Optional<CartItem> existing =
+                    cartItemRepository.findByCartIdAndProductVariantId(
+                            cart.getId(), variant.getId());
+
+            if (existing.isPresent()) {
+                CartItem item = existing.get();
+                int merged = Math.min(item.getQuantity() + guestItem.getQuantity(), available);
+                item.setQuantity(merged);
+                cartItemRepository.save(item);
+            } else {
+                int qty = Math.min(guestItem.getQuantity(), available);
+                if (qty < 1) continue;
+                CartItem item = new CartItem();
+                item.setCart(cart);
+                item.setProductVariant(variant);
+                item.setQuantity(qty);
+                item.setPriceSnapshot(variant.getPrice());
+                cartItemRepository.save(item);
+            }
+        }
+
+        log.info("Merged {} guest items into cart {} for user {}",
+                request.getItems().size(), cart.getId(), user.getId());
+        return buildResponse(cart);
+    }
+
+    @Override
+    @Transactional
+    public CartResponse clearCart() {
+        User user = getCurrentUser();
+        Cart cart = getOrCreateCart(user);
+        cartItemRepository.deleteAllByCartId(cart.getId());
+        log.debug("Cleared cart {} for user {}", cart.getId(), user.getId());
+        return buildResponse(cart);
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
