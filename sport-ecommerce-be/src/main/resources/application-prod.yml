@@ -34,9 +34,7 @@ spring:
             client-secret: ${GOOGLE_CLIENT_SECRET}
 
   elasticsearch:
-    uris: http://elasticsearch-z9n80upqy0i2dfjs0bxv0van:9200
-    username: elastic
-    password: ${ELASTICSEARCH_PASSWORD}
+    uris: http://elasticsearch-g11ljaxxduk3hekhpddg2cr2:9200
     connection-timeout: 15s
     socket-timeout: 30s
 
