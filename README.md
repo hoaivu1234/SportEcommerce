@@ -46,7 +46,7 @@ Dự án áp dụng các công nghệ tiên tiến: **Caching**, **Message Queue
 
 
 
-```mermaid
+```
                     ┌──────────────────────┐
                     │      Frontend        │
                     │       Angular        │
